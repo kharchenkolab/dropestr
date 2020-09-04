@@ -10,7 +10,7 @@ ScorePipelineCells(
   mit.chromosome.name = NULL,
   tags.data = NULL,
   filter.mitochondrial = NULL,
-  filter.intergenic = T,
+  filter.intergenic = TRUE,
   mit.fraction.threshold = NULL,
   intergenic.fraction.threshold = NULL,
   max.pcs.number = 3,

@@ -1,3 +1,6 @@
+#' @import stats
+NULL
+
 ErrorNumProb <- function(error.num, reads.num, error.prob, p.collisions) {
   # p(#Err = eror.num | reads.num) =
   # \Sum_{n.errs=error.num}^{reads.num} Binom(n.errs, size=reads.num, p=error.prob) * p(#Collisions = n.errs - error.num)
@@ -148,7 +151,7 @@ TrainNBClassifier <- function(reads.per.umi.per.cb, adj.umi.num, quality.quants.
 
   quantized.quality.data <- lapply(quality.vals, Quantize, quant.borders)
   quants.num <- max(sapply(quantized.quality.data, max)) + 1
-  quality.probs <- lapply(quantized.quality.data, SmoothDistribution, quality.smooth, quants.num, smooth.probs = T, log.probs=T)
+  quality.probs <- lapply(quantized.quality.data, SmoothDistribution, quality.smooth, quants.num, smooth.probs = TRUE, log.probs=TRUE)
 
   # Reads per UMI distributions
   rpus.extracted <- ExtractReadsPerUmi(reads.per.umi.per.cb, mc.cores=mc.cores)
@@ -168,7 +171,7 @@ EstimateSmallerNeighbourProbs <- function(reads.per.umi.from, reads.per.umi.to, 
   larger.nn <- GetAdjacentUmisNum(reads.per.umi.from, reads.per.umi.to)$Larger
 
   neighbour.distrs <- GetSmallerNeighboursDistributionsBySizes(dp.matrices, larger.nn, cur.n.p.i, size.adj, max.adj.num,
-                                                               return_raw=T)
+                                                               return_raw=TRUE)
 
   neighbour.distrs[1, colSums(neighbour.distrs) < 1e-6] <- 1
   return(list(Probs=neighbour.distrs, LargerNum=larger.nn))
@@ -184,7 +187,7 @@ PredictBayesian <- function(classifier, classifier.df, filt.gene, dp.matrices, n
   divSum <- function(x) x / sum(x)
 
   classifier.df <- classifier.df[ClassifierDfOrder(classifier.df),]
-  rpus <- ExtractReadsPerUmi(filt.gene, one.gene=T)
+  rpus <- ExtractReadsPerUmi(filt.gene, one.gene=TRUE)
   neighbour.info <- EstimateSmallerNeighbourProbs(rpus, rpus, dp.matrices, neighbours.prob.index, size.adj,
                                                   classifier$MaxAdjacentUmisNum)
 
@@ -196,7 +199,7 @@ PredictBayesian <- function(classifier, classifier.df, filt.gene, dp.matrices, n
 
   classifier.df <- classifier.df[ClassifierDfOrder(classifier.df),]
 
-  neighbour.info$Probs <- neighbour.info$Probs[, unique(classifier.df$Target) %>% as.character(), drop=F]
+  neighbour.info$Probs <- neighbour.info$Probs[, unique(classifier.df$Target) %>% as.character(), drop=FALSE]
 
   classifier.dfs <- split(classifier.df[c('MinRpUCS', 'MaxRpU', 'Target', 'ErrorProb', 'RealProb', 'LargerNum')], classifier.df$Target)
   err.prior.probs <- lapply(classifier.dfs, function(df)
@@ -207,7 +210,7 @@ PredictBayesian <- function(classifier, classifier.df, filt.gene, dp.matrices, n
   classifier.df$IsMerged <- mapply(function(e.p, r.p, df)
     ErrorsNumMle(e.p, r.p, df$ErrorProb, df$RealProb, max.adj.num=classifier$MaxAdjacentUmisNum,
                  larger.num=df$LargerNum[1]) >= 1:nrow(df),
-    err.prior.probs, real.prior.probs, classifier.dfs, SIMPLIFY=F) %>% unlist()
+    err.prior.probs, real.prior.probs, classifier.dfs, SIMPLIFY=FALSE) %>% unlist()
 
   return(classifier.df)
 }

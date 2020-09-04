@@ -43,7 +43,7 @@ GetLongestTrue <- function(arr) {
 #'
 #' @export
 EstimateCellsNumber <- function(umi.counts, lag=0.05) {
-  umi.counts <- sort(umi.counts, decreasing=T)
+  umi.counts <- sort(umi.counts, decreasing=TRUE)
   log.umi.counts <- log(umi.counts)
   log.rank <- log(1:length(umi.counts))
   lag <- round(length(umi.counts) * lag)
@@ -72,10 +72,10 @@ PrepareCellsNumberPlot <- function(umi.counts, breaks, estimate.cells.number) {
     fill <- c(High=0, Unknown=cell.num$min, Low=cell.num$max)
   }
 
-  umi.counts <- log10(sort(umi.counts, decreasing=T))
+  umi.counts <- log10(sort(umi.counts, decreasing=TRUE))
   # umi.counts <- log10(umi.counts)
 
-  h <- hist(umi.counts, breaks=breaks, plot=F)
+  h <- hist(umi.counts, breaks=breaks, plot=FALSE)
   h$breaks <- h$breaks[1:(length(h$breaks)-1)]
 
   y.mults <- 10 ** h$breaks
@@ -105,8 +105,8 @@ PrepareCellsNumberPlot <- function(umi.counts, breaks, estimate.cells.number) {
 #' @return Plot of ggplot type.
 #'
 #' @export
-PlotCellsNumberLine <- function(umi.counts, breaks=100, title=NULL, estimate.cells.number=F,
-                                show.legend=T, gg.base=NULL, plot.label=NULL) {
+PlotCellsNumberLine <- function(umi.counts, breaks=100, title=NULL, estimate.cells.number=FALSE,
+                                show.legend=TRUE, gg.base=NULL, plot.label=NULL) {
   if (is.null(gg.base)) {
     gg.base <- ggplot2::ggplot()
   }
@@ -175,7 +175,7 @@ PlotCellsNumberLine <- function(umi.counts, breaks=100, title=NULL, estimate.cel
 #' @return Plot of ggplot type.
 #'
 #' @export
-PlotCellsNumberHist <- function(umi.counts, breaks=100, title=NULL, estimate.cells.number=F, alpha=0.6, show.legend=T) {
+PlotCellsNumberHist <- function(umi.counts, breaks=100, title=NULL, estimate.cells.number=FALSE, alpha=0.6, show.legend=TRUE) {
   plot.data <- PrepareCellsNumberPlot(umi.counts, breaks, estimate.cells.number=estimate.cells.number)
   plot.df <- plot.data$plot.df
 
@@ -226,8 +226,8 @@ PlotCellsNumberSummary <- function(umi.counts, breaks=100, mask=c(T,T,T)) { #TOD
 }
 
 #' @export
-PlotCellsNumberLogLog <- function(umi.counts, estimate.cells.number=F, show.legend=T, gg.base=NULL, plot.label=NULL,
-                                  plot.border=TRUE, linewidth=1, alpha=1.0, logticks=T) {
+PlotCellsNumberLogLog <- function(umi.counts, estimate.cells.number=FALSE, show.legend=TRUE, gg.base=NULL, plot.label=NULL,
+                                  plot.border=TRUE, linewidth=1, alpha=1.0, logticks=TRUE) {
   if (is.null(gg.base)) {
     gg.base <- ggplot2::ggplot()
   }

@@ -8,9 +8,9 @@ PlotCellsNumberHist(
   umi.counts,
   breaks = 100,
   title = NULL,
-  estimate.cells.number = F,
+  estimate.cells.number = FALSE,
   alpha = 0.6,
-  show.legend = T
+  show.legend = TRUE
 )
 }
 \arguments{

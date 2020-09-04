@@ -8,8 +8,8 @@ PlotCellsNumberLine(
   umi.counts,
   breaks = 100,
   title = NULL,
-  estimate.cells.number = F,
-  show.legend = T,
+  estimate.cells.number = FALSE,
+  show.legend = TRUE,
   gg.base = NULL,
   plot.label = NULL
 )

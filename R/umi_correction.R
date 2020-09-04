@@ -19,7 +19,7 @@ if (requireNamespace("parallel", quietly = TRUE)) {
 }
 
 #' @export
-ExtractReadsPerUmi <- function(reads.per.umi.per.cb, one.gene=F, mc.cores=1) {
+ExtractReadsPerUmi <- function(reads.per.umi.per.cb, one.gene=FALSE, mc.cores=1) {
   if (one.gene)
     return(sapply(reads.per.umi.per.cb, `[[`, 1))
 
@@ -217,7 +217,7 @@ FilterUmisInGene <- function(cur.gene, classifier, dp.matrices, neighbours.prob.
   }
 
   if (length(not.filtered.umis) == 0) {
-    cur.reads.per.umi <- ExtractReadsPerUmi(cur.gene, one.gene=T)
+    cur.reads.per.umi <- ExtractReadsPerUmi(cur.gene, one.gene=TRUE)
     return(cur.gene[which.max(cur.reads.per.umi)])
   }
 

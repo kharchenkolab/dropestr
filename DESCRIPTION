@@ -6,7 +6,7 @@ Authors@R: c(
     person("Viktor", "Petukhov", email = "viktor.s.petuhov@ya.ru", role = c("aut")),
     person("Peter", "Kharchenko", email = "peter_kharchenko@hms.harvard.edu", role = "aut"), person("Evan","Biederstedt", email="evan.biederstedt@gmail.com", role=c("aut", "cre")))
 Description: Correction of UMI sequence errors, UMI collisions and filtration
-    of low-quality cells.
+    of low-quality cells using the methods described in "dropEst: pipeline for accurate estimation of molecular counts in droplet-based single-cell RNA-seq experiments", Petukhov et al., Genome Biology (2018), <doi:10.1186/s13059-018-1449-6>.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -17,8 +17,8 @@ Imports:
   magrittr,
   pcaPP (>= 1.9),
   Rcpp,
-  RcppProgress,
-  Matrix (>= 1.2-7.1)
+  RcppProgress, 
+  stats
 Suggests:
   parallel,
   optparse,
@@ -33,11 +33,10 @@ LinkingTo:
   Rcpp,
   RcppProgress,
   RcppEigen
-SystemRequirements: GNU make
 VignetteBuilder: knitr
-SystemRequirements: C++11
+SystemRequirements: GNU make, C++11
 NeedsCompilation: yes
 URL: https://github.com/kharchenkolab/dropestr
 BugReports: https://github.com/kharchenkolab/dropestr/issues
-Author: Peter Kharchenko [aut], Viktor Petukhov [aut], Evan Biederstedt [aut, cre]
+Author: Viktor Petukhov [aut], Peter Kharchenko [aut], Evan Biederstedt [aut, cre]
 Maintainer: Evan Biederstedt <evan.biederstedt@gmail.com>

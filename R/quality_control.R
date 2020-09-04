@@ -18,8 +18,9 @@ if(getRversion() >= "2.15.1"){
 #' @param top.cells
 #' @return list
 EstimateSaturation <- function(reads.by.umig.vec, reads.by.umig.cbs, umi.counts, steps.num=100, max.estimate.rate=10, top.cells=1000) {
-  if (!requireNamespace("preseqR", quietly = TRUE))
+  if (!requireNamespace("preseqR", quietly = TRUE)){
     stop("preseqR package is required")
+  }
 
   top.cbs <- names(umi.counts)[1:top.cells]
   top.reads.by.umig <- reads.by.umig.vec[reads.by.umig.cbs %in% top.cbs]
@@ -149,7 +150,7 @@ PlotGenesPerCell <- function(count.matrix, bins=50) {
 #' @param fraction
 #' @param plot.threshold
 #' @param main
-FractionSmoothScatter <- function(fraction, plot.threshold=F, main='') {
+FractionSmoothScatter <- function(fraction, plot.threshold=FALSE, main='') {
   smoothScatter(fraction, xlab='Cell rank', ylab='Fraction', main=main, cex.lab=1.4, ylim=c(0, 1))
   if (is.logical(plot.threshold) && plot.threshold) {
     plot.threshold <- median(fraction) + 4 * mad(fraction)
@@ -161,7 +162,7 @@ FractionSmoothScatter <- function(fraction, plot.threshold=F, main='') {
 
 #' @export
 GetChromosomeFraction <- function(reads.per.chr.per.cell, chromosome.name) {
-  read.counts <- sort(rowSums(reads.per.chr.per.cell), decreasing=T)
+  read.counts <- sort(rowSums(reads.per.chr.per.cell), decreasing=TRUE)
   if (!is.null(reads.per.chr.per.cell[[chromosome.name]])) {
     chromosome.frac <- reads.per.chr.per.cell[names(read.counts), chromosome.name] / read.counts
   } else {
@@ -173,7 +174,7 @@ GetChromosomeFraction <- function(reads.per.chr.per.cell, chromosome.name) {
 
 #' @export
 GetGenesetFraction <- function(count.matrix, genes) {
-  umi.counts <- sort(Matrix::colSums(count.matrix), decreasing=T)
+  umi.counts <- sort(Matrix::colSums(count.matrix), decreasing=TRUE)
   presented.mit.genes <- intersect(genes, rownames(count.matrix))
   genes.frac <- Matrix::colSums(count.matrix[presented.mit.genes, names(umi.counts)]) / umi.counts
   return(genes.frac)

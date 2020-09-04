@@ -4,7 +4,7 @@
 \alias{FractionSmoothScatter}
 \title{Plot smoothScatter of geneset fraction for each cell by cell rank}
 \usage{
-FractionSmoothScatter(fraction, plot.threshold = F, main = "")
+FractionSmoothScatter(fraction, plot.threshold = FALSE, main = "")
 }
 \description{
 Plot smoothScatter of geneset fraction for each cell by cell rank

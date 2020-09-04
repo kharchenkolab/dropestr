@@ -193,7 +193,7 @@ FilterHighFraction <- function(fraction, threshold=NULL) {
 #'
 #' @export
 ScorePipelineCells <- function(pipeline.data, mitochondrion.genes=NULL, mit.chromosome.name=NULL, tags.data=NULL,
-                               filter.mitochondrial=NULL, filter.intergenic=T,
+                               filter.mitochondrial=NULL, filter.intergenic=TRUE,
                                mit.fraction.threshold=NULL, intergenic.fraction.threshold=NULL,
                                max.pcs.number=3, predict.all=FALSE, verbose=FALSE, kde.bandwidth.mult=1, cell.number=NULL) {
   if (is.null(filter.mitochondrial)) {
