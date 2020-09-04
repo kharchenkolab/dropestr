@@ -1,0 +1,88 @@
+---
+title: "Filtration of low-quality cells"
+author: "Petukhov Viktor"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    css:
+vignette: >
+  %\VignetteIndexEntry{Filtration of low-quality cells}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+ggplot2::theme_set(ggplot2::theme_bw(base_size = 14) + ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)))
+```
+
+## Quick start
+
+```{r}
+library(dropestr)
+data('lq_cells_data')
+pipeline_data <- lq_cells_data$pipeline
+mit_genes <- lq_cells_data$genes
+```
+
+The simplest way to score the cells for data, obtained with the pipeline:
+```{r, fig.width=5, fig.height=4}
+scores <- ScorePipelineCells(pipeline_data)
+PlotCellScores(scores, y.threshold=0.9)
+```
+
+Cells with high mitochondrial fraction are probably dead, so it's reasonable to filter them out. There are two ways of 
+distinguishing of mitochondrial reads: by chromosome name and by genesets. The first approach estimates the fraction of reads,
+while the second works with UMIs. However, results are quite similar.
+
+```{r, fig.width=4.5, fig.height=3}
+scores_chromosome_filt <- ScorePipelineCells(pipeline_data, mit.chromosome.name='chrM')
+scores_geneset_filt <- ScorePipelineCells(pipeline_data, mitochondrion.genes=mit_genes)
+PlotCellScores(scores_chromosome_filt, y.threshold=0.9, main='Chromosome')
+PlotCellScores(scores_geneset_filt, y.threshold=0.9, main='Geneset')
+```
+
+Answers are the same for `r round(mean((scores_chromosome_filt > 0.9) == (scores_geneset_filt > 0.9)) * 100, 2)`% cells.
+
+## Manual filtration
+This filtration can be done manually in more flexible way.
+The first step is feature extraction from existed data.
+
+```{r}
+lq_cells_df <- PrepareLqCellsDataPipeline(pipeline_data, mitochondrion.genes=mit_genes)
+```
+
+Next, we need to estimate approximate number of real cells. It can be done using one of the following plots,
+each of which shows the expected number of cells, however for different datasets some of them can give more precise result than the other:
+```{r, fig.width=5, fig.height=3}
+PlotCellsNumberLogLog(pipeline_data$aligned_umis_per_cell, estimate.cells.number=T)
+PlotCellsNumberLine(pipeline_data$aligned_umis_per_cell, estimate.cells.number=T)
+PlotCellsNumberHist(pipeline_data$aligned_umis_per_cell, estimate.cells.number=T)
+```
+
+Let's look at all the features we use. Please, keep in mind that all features are sacled to [0, 1] interval.
+
+```{r}
+for (n in names(lq_cells_df)) {
+  smoothScatter(lq_cells_df[[n]], xlab = "Cell rank", ylab = n, main = n)
+}
+```
+
+We can see that high mitochondrial fraction doesn't help to distinguish right tail from the left, so we can manually filter it and remove this feature:
+
+```{r}
+lq_cells_df <- lq_cells_df[lq_cells_df$MitochondrionFraction < 0.1, ]
+lq_cells_df$MitochondrionFraction <- NULL
+```
+
+Also, based on what we see, we can decide to move border of "definitely low-quality" cells more to the right. The algoruthm is pretty robust to border selection though.
+
+```{r}
+cells_number_manual <- list(min=450, max=800)
+```
+
+Finally, we're redy to get final score:
+
+```{r}
+scores <- ScoreQualityData(pipeline_data$aligned_umis_per_cell, lq_cells_df, cells_number_manual)
+PlotCellScores(scores, y.threshold=0.9)
+```
