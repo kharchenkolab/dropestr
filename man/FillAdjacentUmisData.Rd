@@ -4,8 +4,11 @@
 \alias{FillAdjacentUmisData}
 \title{Fill information about adjacent UMIs, their probabilities and differences for each UMI.}
 \usage{
-FillAdjacentUmisData(umi_probabilites, adjacent_only = FALSE,
-  show_progress = FALSE)
+FillAdjacentUmisData(
+  umi_probabilites,
+  adjacent_only = FALSE,
+  show_progress = FALSE
+)
 }
 \arguments{
 \item{umi_probabilites}{vector of UMI probabilities.}

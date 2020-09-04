@@ -4,8 +4,14 @@
 \alias{PlotCellsNumberHist}
 \title{Plot for the estimation of minimal size of high-quality cells.}
 \usage{
-PlotCellsNumberHist(umi.counts, breaks = 100, title = NULL,
-  estimate.cells.number = F, alpha = 0.6, show.legend = T)
+PlotCellsNumberHist(
+  umi.counts,
+  breaks = 100,
+  title = NULL,
+  estimate.cells.number = F,
+  alpha = 0.6,
+  show.legend = T
+)
 }
 \arguments{
 \item{umi.counts}{vector with the number of UMIs per cell.}

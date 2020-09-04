@@ -5,14 +5,23 @@
 \alias{PrepareLqCellsDataPipeline}
 \title{Prepare data frame for low-quality cells filtration.}
 \usage{
-PrepareLqCellsData(count.matrix, aligned.reads.per.cell,
-  total.umis.per.cell = NULL, total.reads.per.cell = NULL,
-  intergenic.reads.per.cell = NULL, mitochondrion.fraction = NULL,
-  scale = TRUE)
+PrepareLqCellsData(
+  count.matrix,
+  aligned.reads.per.cell,
+  total.umis.per.cell = NULL,
+  total.reads.per.cell = NULL,
+  intergenic.reads.per.cell = NULL,
+  mitochondrion.fraction = NULL,
+  scale = TRUE
+)
 
-PrepareLqCellsDataPipeline(data, total.reads.per.cell = NULL,
-  mitochondrion.genes = NULL, mit.chromosome.name = NULL,
-  scale = TRUE)
+PrepareLqCellsDataPipeline(
+  data,
+  total.reads.per.cell = NULL,
+  mitochondrion.genes = NULL,
+  mit.chromosome.name = NULL,
+  scale = TRUE
+)
 }
 \arguments{
 \item{count.matrix}{Matrix with counts of umi per gene per cell.}
@@ -28,8 +37,6 @@ PrepareLqCellsDataPipeline(data, total.reads.per.cell = NULL,
 \item{reads.per.gene}{List, which contains number of reads per gene per cell.}
 
 \item{total.reads.per.cb}{Number of reads per cell before alignment.}
-
-\item{merge.targets}{Targets of CB merge. Used only with total.reads.per.cb provided.}
 
 \item{merge.targets}{Targets of CB merge. Used only with total.reads.per.cell provided.}
 }

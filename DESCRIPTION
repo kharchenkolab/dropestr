@@ -29,7 +29,7 @@ Suggests:
 Depends:
   R (>= 3.2.2),
   Matrix (>= 1.2-7.1)
-RoxygenNote: 6.1.0
+RoxygenNote: 7.1.1
 LinkingTo: 
   Rcpp,
   RcppProgress,

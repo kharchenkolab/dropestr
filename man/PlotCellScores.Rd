@@ -4,8 +4,13 @@
 \alias{PlotCellScores}
 \title{Plot smoothScatter with cell quality scores by cell rank}
 \usage{
-PlotCellScores(scores, cells.number = NULL, y.threshold = NULL,
-  main = NULL, bandwidth = c(length(scores)/100, 0.008))
+PlotCellScores(
+  scores,
+  cells.number = NULL,
+  y.threshold = NULL,
+  main = NULL,
+  bandwidth = c(length(scores)/100, 0.008)
+)
 }
 \description{
 Plot smoothScatter with cell quality scores by cell rank

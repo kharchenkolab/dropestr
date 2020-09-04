@@ -4,8 +4,10 @@
 \alias{PlotIntergenicFractionByChromosomes}
 \title{Plot fraction of different read types for each chromosome}
 \usage{
-PlotIntergenicFractionByChromosomes(reads.per.chr.per.cells,
-  chromosome.reads.threshold = 0.001)
+PlotIntergenicFractionByChromosomes(
+  reads.per.chr.per.cells,
+  chromosome.reads.threshold = 0.001
+)
 }
 \arguments{
 \item{reads.per.chr.per.cells}{named list, which contains data frames for each type of reads}

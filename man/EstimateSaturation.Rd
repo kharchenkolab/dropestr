@@ -4,8 +4,14 @@
 \alias{EstimateSaturation}
 \title{Estimate library saturation with preseqR}
 \usage{
-EstimateSaturation(reads.by.umig.vec, reads.by.umig.cbs, umi.counts,
-  steps.num = 100, max.estimate.rate = 10, top.cells = 1000)
+EstimateSaturation(
+  reads.by.umig.vec,
+  reads.by.umig.cbs,
+  umi.counts,
+  steps.num = 100,
+  max.estimate.rate = 10,
+  top.cells = 1000
+)
 }
 \value{
 list
