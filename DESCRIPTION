@@ -36,3 +36,6 @@ LinkingTo:
   RcppEigen
 VignetteBuilder: knitr
 SystemRequirements: C++11
+NeedsCompilation: yes
+URL: https://github.com/kharchenkolab/dropestr
+BugReports: https://github.com/kharchenkolab/dropestr/issues

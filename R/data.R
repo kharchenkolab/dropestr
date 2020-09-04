@@ -11,5 +11,5 @@
 #'   \item{cur}{observed values}
 #'   ...
 #' }
-#' @source \url{https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR1784312}
+#' <https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR1784312>
 "saturation_srr1784312"

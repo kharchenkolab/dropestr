@@ -11,9 +11,7 @@ A list with the next fields:
   \item{cur}{observed values}
   ...
 }
-}
-\source{
-\url{https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR1784312}
+<https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR1784312>
 }
 \usage{
 saturation_srr1784312

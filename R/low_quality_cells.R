@@ -6,6 +6,7 @@
 #' @examples
 #' Center(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))
 #' Center(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)), func=median)
+#' @export
 Center <- function(x, func=mean) {
   return(data.frame(t(t(x) - apply(x, 2, func))))
 }
@@ -18,6 +19,7 @@ Center <- function(x, func=mean) {
 #' @examples
 #' Normalize(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))
 #' Normalize(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)), func=function(v) diff(range(v)))
+#' @export
 Normalize <- function(x, func=sd) {
   normalizer <- apply(x, 2, func)
   if (any(abs(normalizer) < 1e-10)) {
@@ -34,6 +36,7 @@ Normalize <- function(x, func=sd) {
 #' @return Data frame with the centered and normalized x.
 #' @examples
 #' Scale(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))
+#' @export
 Scale <- function(x, center_func=min, norm_func=max) {
   return(data.frame(Normalize(Center(x, center_func), norm_func)))
 }
