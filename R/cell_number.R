@@ -2,6 +2,12 @@
 #' @importFrom magrittr %<>%
 NULL
 
+## for magrittr and dplyr functions below
+if(getRversion() >= "2.15.1"){
+  utils::globalVariables(c("."))
+}
+
+
 #' Calculate derivative of an tabular function.
 #'
 #' @param x vector of x values, where the function was calculated.

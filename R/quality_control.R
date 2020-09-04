@@ -1,6 +1,12 @@
 #' @importFrom dplyr %>%
 NULL
 
+## for magrittr and dplyr functions below
+if(getRversion() >= "2.15.1"){
+  utils::globalVariables(c("."))
+}
+
+
 #' Estimate library saturation with preseqR
 #'
 #' @export
