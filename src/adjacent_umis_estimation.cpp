@@ -67,18 +67,18 @@ std::vector<bool> ResolveUmiDependencies(const s_vec_t &base_umis, const s_vec_t
       continue;
 
     if (verbose) {
-      std::cout << id << ", " << base_umi_id << ": " << base_uniq[base_umi_id] << "\n";
+      Rcpp::Rcout << id << ", " << base_umi_id << ": " << base_uniq[base_umi_id] << "\n";
     }
     auto const &target_umi = target_umis[id];
     auto iter = inds_by_base.find(target_umi);
     int target_id = (iter == inds_by_base.end()) ? -1 : iter->second;
     if (verbose) {
-      std::cout << "\t" << target_umis[id] << " (" << target_id << ")\n";
+      Rcpp::Rcout << "\t" << target_umis[id] << " (" << target_id << ")\n";
     }
     while (target_id != -1 && target_id != base_umi_id && target_id != merge_targets[target_id]) {
       target_id = merge_targets[target_id];
       if (verbose) {
-        std::cout << "\t" << ((target_id != -1) ? base_uniq[target_id] : std::to_string(-1)) << " (" << target_id << ")\n";
+        Rcpp::Rcout << "\t" << ((target_id != -1) ? base_uniq[target_id] : std::to_string(-1)) << " (" << target_id << ")\n";
       }
     }
 
@@ -90,11 +90,11 @@ std::vector<bool> ResolveUmiDependencies(const s_vec_t &base_umis, const s_vec_t
     int base_umi_id = inds_by_base.at(base_umis[i]);
     is_filtered.push_back(merge_targets[base_umi_id] != base_umi_id);
     if (verbose) {
-      std::cout << "(" << base_umi_id << ", " << merge_targets[base_umi_id] << ") ";
+      Rcpp::Rcout << "(" << base_umi_id << ", " << merge_targets[base_umi_id] << ") ";
     }
   }
   if (verbose) {
-    std::cout << std::endl;
+    Rcpp::Rcout << std::endl;
   }
 
   return is_filtered;

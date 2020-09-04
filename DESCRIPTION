@@ -18,7 +18,6 @@ Imports:
   pcaPP (>= 1.9),
   Rcpp,
   RcppProgress,
-  RcppEigen,
   Matrix (>= 1.2-7.1)
 Suggests:
   parallel,
@@ -34,8 +33,11 @@ LinkingTo:
   Rcpp,
   RcppProgress,
   RcppEigen
+SystemRequirements: GNU make
 VignetteBuilder: knitr
 SystemRequirements: C++11
 NeedsCompilation: yes
 URL: https://github.com/kharchenkolab/dropestr
 BugReports: https://github.com/kharchenkolab/dropestr/issues
+Author: Peter Kharchenko [aut], Viktor Petukhov [aut], Evan Biederstedt [aut, cre]
+Maintainer: Evan Biederstedt <evan.biederstedt@gmail.com>
