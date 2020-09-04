@@ -1,0 +1,6 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+.travis.yml
+CHANGELOG.md
+^LICENSE\.md$
+dropestr*.tar.gz

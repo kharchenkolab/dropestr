@@ -41,7 +41,7 @@ CorrectUmiSequenceErrorsClassic <- function(reads.per.umi.per.cb, mult, mc.cores
   filt.genes <- plapply(reads.per.umi.per.cb, FilterUmisInGeneClassic, mult=mult, mc.cores=mc.cores)
 
   if (verbosity.level > 0) {
-    cat(" Completed.\n")
+    message(" Completed.\n")
   }
 
   return(filt.genes)
@@ -50,7 +50,7 @@ CorrectUmiSequenceErrorsClassic <- function(reads.per.umi.per.cb, mult, mc.cores
 CorrectUmiSequenceErrorsBayesian <- function(reads.per.umi.per.cb, collisions.info, correction.info, adj.umi.num,
                                              mc.cores, quality.quants.num, verbosity.level=0) {
   if (verbosity.level > 0) {
-    cat("\nEstimating prior error probabilities...")
+    message("\nEstimating prior error probabilities...")
   }
 
   if (length(reads.per.umi.per.cb) == 0)
@@ -68,15 +68,15 @@ CorrectUmiSequenceErrorsBayesian <- function(reads.per.umi.per.cb, collisions.in
   }
 
   if (verbosity.level > 0) {
-    cat(" Completed.\n")
-    cat("Correcting UMI sequence errors...")
+    message(" Completed.\n")
+    message("Correcting UMI sequence errors...")
   }
 
   filt.genes <- plapply(reads.per.umi.per.cb, FilterUmisInGene, clf, correction.info$dp.matrices,
                         correction.info$neighb.prob.index, collisions.info, mc.cores=mc.cores)
 
   if (verbosity.level > 0) {
-    cat("Completed.\n")
+    message("Completed.\n")
   }
 
   return(filt.genes)
@@ -100,31 +100,31 @@ CorrectUmiSequenceErrors <- function(reads.per.umi.per.cb.info, umi.probabilitie
 
   reads.per.umi.per.cb <- reads.per.umi.per.cb.info$reads_per_umi
   if (verbosity.level > 0) {
-    cat("Correcting UMI sequence errors.\n")
+    message("Correcting UMI sequence errors.\n")
   }
 
   if (is.null(umi.probabilities)) {
     if (verbosity.level > 0) {
-      cat("Estimating UMIs distribution...")
+      message("Estimating UMIs distribution...")
     }
     umi.distribution <- GetUmisDistribution(reads.per.umi.per.cb, smooth = distribution.smooth)
     umi.probabilities <- umi.distribution / sum(umi.distribution)
 
     if (verbosity.level > 0) {
-      cat(" Completed.\n")
+      message(" Completed.\n")
     }
   }
 
   max.umi.per.gene <- max(sapply(reads.per.umi.per.cb, length))
   if (is.null(collisions.info)) {
     if (verbosity.level > 0) {
-      cat("Filling collisions info...\n")
+      message("Filling collisions info...\n")
     }
 
     collisions.info <- FillCollisionsAdjustmentInfo(umi.probabilities, max.umi.per.gene + 1, verbose=(verbosity.level > 1))
 
     if (verbosity.level > 0) {
-      cat("Completed.\n")
+      message("Completed.\n")
     }
   }
 
@@ -210,7 +210,7 @@ FilterUmisInGene <- function(cur.gene, classifier, dp.matrices, neighbours.prob.
     classifier.df$Base <- droplevels(classifier.df$Base)
 
     if (verbose) {
-      cat("Total: ", total.removed, ", current: ", current.removed, "\n")
+      message("Total: ", total.removed, ", current: ", current.removed, "\n")
     }
     if (current.removed == 0 || nrow(classifier.df) == 0)
       break
@@ -227,12 +227,12 @@ FilterUmisInGene <- function(cur.gene, classifier, dp.matrices, neighbours.prob.
 #' @export
 PrepareUmiCorrectionInfo <- function(umi.probabilities, max.umi.per.gene, quants.num=50, verbosity.level=0) {
   if (verbosity.level > 0) {
-    cat("Filling info about adjacent UMIs...\n")
+    message("Filling info about adjacent UMIs...\n")
   }
   neighbours.info <- FillAdjacentUmisData(umi.probabilities, show_progress=(verbosity.level > 1))
 
   if (verbosity.level > 0) {
-    cat("Done!\n")
+    message("Done!\n")
   }
 
   neighbour.probs <- neighbours.info$probabilities[names(umi.probabilities)]
@@ -247,7 +247,7 @@ PrepareUmiCorrectionInfo <- function(umi.probabilities, max.umi.per.gene, quants
   names(dp.matrices) <- GetUmiProbabilitiesIndex(uniq.umi.probs, quant.size)
 
   if (verbosity.level > 0) {
-    cat("Correction info prepared!\n\n")
+    message("Correction info prepared!\n\n")
   }
 
   return(list(neighb.prob.index=neighb.prob.index, dp.matrices=dp.matrices))

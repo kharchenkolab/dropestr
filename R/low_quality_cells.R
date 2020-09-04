@@ -223,9 +223,9 @@ ScorePipelineCells <- function(pipeline.data, mitochondrion.genes=NULL, mit.chro
 
   if (verbose) {
     if (!is.null(max.pcs.number)) {
-      cat("Explained variance after PCA: ", round(100 * pca.res$total.variance.explained, 2), "%", "; used ", ncol(bc.df.pca), " PCs.\n", sep='')
+      message("Explained variance after PCA: ", round(100 * pca.res$total.variance.explained, 2), "%", "; used ", ncol(bc.df.pca), " PCs.\n", sep='')
     }
-    cat("Used features: ", paste0(used.features, collapse=', '), ".\n", sep='')
+    message("Used features: ", paste0(used.features, collapse=', '), ".\n", sep='')
   }
 
   if (filter.mitochondrial) {
