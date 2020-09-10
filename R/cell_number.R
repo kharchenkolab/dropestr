@@ -1,6 +1,7 @@
 #' @importFrom dplyr %>%
 #' @importFrom magrittr %<>%
 #' @import Rcpp
+#' @import Matrix
 NULL
 
 ## for magrittr and dplyr functions below
