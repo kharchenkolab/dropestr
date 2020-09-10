@@ -6,3 +6,5 @@ CHANGELOG.md
 dropestr*.tar.gz
 missfont.log
 Meta
+^doc$
+^Meta$
