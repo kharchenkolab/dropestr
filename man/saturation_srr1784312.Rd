@@ -5,18 +5,12 @@
 \alias{saturation_srr1784312}
 \title{Results of saturation analysis of SRR1784312 dataset (mouse ES cells).}
 \format{
-A list with the next fields:
-\describe{
-  \item{sat}{saturation curve}
-  \item{cur}{observed values}
-  ...
-}
-<https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR1784312>
+An object of class \code{list} of length 2.
 }
 \usage{
 saturation_srr1784312
 }
 \description{
-Results of saturation analysis of SRR1784312 dataset (mouse ES cells).
+<https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR1784312>
 }
 \keyword{datasets}

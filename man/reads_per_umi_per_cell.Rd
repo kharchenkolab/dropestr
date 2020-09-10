@@ -3,8 +3,7 @@
 \docType{data}
 \name{reads_per_umi_per_cell}
 \alias{reads_per_umi_per_cell}
-\title{Results of processing of 10x Frozen Human PBMC (Donor A) dataset, neccesary for UMI errors correction. 50 largest cells.
-https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/frozen_pbmc_donor_a}
+\title{Results of processing of 10x Frozen Human PBMC (Donor A) dataset, neccesary for UMI errors correction. 50 largest cells.}
 \format{
 An object of class \code{list} of length 5.
 }
@@ -13,6 +12,8 @@ reads_per_umi_per_cell
 }
 \description{
 Results of processing of 10x Frozen Human PBMC (Donor A) dataset, neccesary for UMI errors correction. 50 largest cells.
-https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/frozen_pbmc_donor_a
+}
+\references{
+\url{https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/frozen_pbmc_donor_a}
 }
 \keyword{datasets}
