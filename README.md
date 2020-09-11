@@ -6,7 +6,7 @@ Perform UMI count corrections, and filtration of low-quality cells. Part of [dro
 
 Please see the vignettes:
 * [UMI Correction](https://htmlpreview.github.io/?https://raw.githubusercontent.com/kharchenkolab/dropestr/master/doc/umi-correction.html)
-* [Filtration of Low-quality Cells](https://htmlpreview.github.io/?https://raw.githubusercontent.com/kharchenkolab/dropestr/master/doc/low-quality-cells.html)
+* [Filtration of Low-Quality Cells](https://htmlpreview.github.io/?https://raw.githubusercontent.com/kharchenkolab/dropestr/master/doc/low-quality-cells.html)
 * [Quality Control](https://htmlpreview.github.io/?https://raw.githubusercontent.com/kharchenkolab/dropestr/master/doc/report.html)
 
 ## Installation
@@ -14,6 +14,14 @@ Please see the vignettes:
 ```r
 devtools::install_github('kharchenkolab/dropestr')
 ```
+
+## Cell Filtration Procedure
+
+<p align="center">
+  <img src="./inst/cellLevelQuality.png">
+</p>
+
+
 
 ## Citation 
 
