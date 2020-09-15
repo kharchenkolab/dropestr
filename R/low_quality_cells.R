@@ -1,8 +1,8 @@
-#' Center numeric data.
+#' Center numeric data
 #'
-#' @param x numeric matrix or data.frame.
-#' @param func Function, which returns a center for given vector.
-#' @return Data frame with the centered x.
+#' @param x numeric matrix or data.frame
+#' @param func Function, which returns a center for given vector
+#' @return Data frame with the centered x
 #' @examples
 #' Center(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))
 #' Center(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)), func=median)
@@ -11,11 +11,11 @@ Center <- function(x, func=mean) {
   return(data.frame(t(t(x) - apply(x, 2, func))))
 }
 
-#' Normalize numeric data.
+#' Normalize numeric data
 #'
-#' @param x numeric matrix or data.frame.
-#' @param func Function, which returns a normalizer for given vector.
-#' @return Data frame with the normalized x.
+#' @param x numeric matrix or data.frame
+#' @param func Function, which returns a normalizer for given vector
+#' @return Data frame with the normalized x
 #' @examples
 #' Normalize(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))
 #' Normalize(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)), func=function(v) diff(range(v)))
@@ -28,12 +28,12 @@ Normalize <- function(x, func=sd) {
   return(t(t(x) / normalizer))
 }
 
-#' Center and normalized numeric data.
+#' Center and normalized numeric data
 #'
-#' @param x numeric matrix or data.frame.
-#' @param cent_func Function, which returns a center for given vector.
-#' @param norm_func Function, which returns a normalizer for given vector.
-#' @return Data frame with the centered and normalized x.
+#' @param x numeric matrix or data.frame
+#' @param cent_func Function, which returns a center for given vector
+#' @param norm_func Function, which returns a normalizer for given vector
+#' @return Data frame with the centered and normalized x
 #' @examples
 #' Scale(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))
 #' @export
@@ -143,9 +143,9 @@ PrepareLqCellsDataPipeline <- function(data, total.reads.per.cell=NULL, mitochon
 #' Perform PCA with the optimal number of principal components.
 #'
 #' @param data data for low-quality cells filtration
-#' @param explained.var.required minimal fraction of explained variance.
-#' @param max.pcs maximal number of output principal components.
-#' @param loadings.filt.threshold minimal contribution to loadings, with which feature is considered as used.
+#' @param explained.var.required numeric Minimal fraction of explained variance (default=0.98)
+#' @param max.pcs numeric Maximal number of output principal components (default=3)
+#' @param loadings.filt.threshold numeric Minimal contribution to loadings, with which feature is considered as used (default=7.5e-2)
 #' @return List with the PCA results:
 #'   \item{total.variance.explained}{fraction of the explained variance.}
 #'   \item{pca.data}{transformed data with the optimal number of principal components.}
@@ -188,8 +188,8 @@ FilterHighFraction <- function(fraction, threshold=NULL) {
 
 #' Score cells with a KDE classifier.
 #'
-#' @param pipeline.data data for classification.
-#' @return Probability of cell to be high-quality.
+#' @param pipeline.data data for classification
+#' @return Probability of cell to be high-quality
 #'
 #' @export
 ScorePipelineCells <- function(pipeline.data, mitochondrion.genes=NULL, mit.chromosome.name=NULL, tags.data=NULL,
@@ -226,9 +226,9 @@ ScorePipelineCells <- function(pipeline.data, mitochondrion.genes=NULL, mit.chro
 
   if (verbose) {
     if (!is.null(max.pcs.number)) {
-      message("Explained variance after PCA: ", round(100 * pca.res$total.variance.explained, 2), "%", "; used ", ncol(bc.df.pca), " PCs.\n", sep='')
+      message("Explained variance after PCA: ", round(100 * pca.res$total.variance.explained, 2), "%", "; used ", ncol(bc.df.pca), " PCs.", sep='')
     }
-    message("Used features: ", paste0(used.features, collapse=', '), ".\n", sep='')
+    message("Used features: ", paste0(used.features, collapse=', '), sep='')
   }
 
   if (filter.mitochondrial) {
@@ -253,7 +253,7 @@ ScorePipelineCells <- function(pipeline.data, mitochondrion.genes=NULL, mit.chro
   if (predict.all) {
     bc.df.pca <- bc.df.pca[names(umi.counts.raw),]
   } else {
-    bc.df.pca <- bc.df.pca[names(sort(Matrix::colSums(pipeline.data$cm), decreasing=T)),]
+    bc.df.pca <- bc.df.pca[names(sort(Matrix::colSums(pipeline.data$cm), decreasing=TRUE)),]
   }
   scores <- PredictKDE(clf, bc.df.pca, bandwidth.mult=kde.bandwidth.mult)[,2]
   if (filter.mitochondrial) {

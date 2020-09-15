@@ -10,19 +10,19 @@ if(getRversion() >= "2.15.1"){
 }
 
 
-#' Calculate derivative of an tabular function.
+#' Calculate derivative of an tabular function
 #'
-#' @param x vector of x values, where the function was calculated.
-#' @param y vector of function values on x.
-#' @param lag smoothing parameter for derivative calculation.
-#' @return Vector of tabular function derivatives.
+#' @param x vector of x values, where the function was calculated
+#' @param y vector of function values on x
+#' @param lag numeric Smoothing parameter for derivative calculation (default=1)
+#' @return Vector of tabular function derivatives
 ArrayDerivative <- function(x, y, lag=1) {
   return(diff(y, lag) / diff(x, lag))
 }
 
-#' Get the coordinates of the longest true seqeunce of a logical vector.
+#' Get the coordinates of the longest true seqeunce of a logical vector
 #'
-#' @param arr a logical vector.
+#' @param arr a logical vector
 #' @return List with two coordinates:
 #'   \item{start}{start position}
 #'   \item{end}{end position}
@@ -33,10 +33,10 @@ GetLongestTrue <- function(arr) {
   return(list(start=start.inds[longest.seq], end=start.inds[longest.seq]+lens[longest.seq]))
 }
 
-#' Get the coordinates of the longest true seqeunce of a logical vector.
+#' Get the coordinates of the longest true seqeunce of a logical vector
 #'
-#' @inheritParams ArrayDerivative
-#' @param umi.counts vector with the number of UMIs per cell.
+#' @param umi.counts vector with the number of UMIs per cell
+#' @param lag numeric Smoothing parameter for derivative calculation (default=0.05)
 #' @return List with the estimated number of cells:
 #'   \item{min}{minimal number of cells}
 #'   \item{estimated}{expected number of cells}
@@ -56,20 +56,21 @@ EstimateCellsNumber <- function(umi.counts, lag=0.05) {
   return(list(expected=expected.num, max=max.num, min=round(expected.num * 0.75)))#, x=x, x2=x2, y=y, y2=y2, lag=lag
 }
 
-#' Prepare data for plotting the number of cells.
+#' Prepare data for plotting the number of cells
 #'
 #' @inheritParams EstimateCellsNumber
-#' @param breaks number of breaks in a histogram.
-#' @param title title of the plot.
-#' @param fill threshold cell ranks for different fill colors.
+#' @param breaks numeric Number of breaks in a histogram
+#' @param estimate.cells.number boolean Whether to calculate cell numbers via EstimateCellsNumber() (default=FALSE)
+#' @param title title of the plot (default=NULL)
 #' @return List with the data, needed for plotting:
 #'   \item{plot.df}{data frame with the data for plotting}
 #'   \item{title}{title of th plot}
 #'   \item{umi.counts}{transformed number of UMIs per cell}
 #'   \item{y.label}{y label of the plot}
-PrepareCellsNumberPlot <- function(umi.counts, breaks, estimate.cells.number) {
+PrepareCellsNumberPlot <- function(umi.counts, breaks, estimate.cells.number=FALSE, title=NULL) {
   if (estimate.cells.number) {
     cell.num <- EstimateCellsNumber(umi.counts)
+    ## fill threshold cell ranks for different fill colors.
     fill <- c(High=0, Unknown=cell.num$min, Low=cell.num$max)
   }
 
@@ -80,7 +81,7 @@ PrepareCellsNumberPlot <- function(umi.counts, breaks, estimate.cells.number) {
   h$breaks <- h$breaks[1:(length(h$breaks)-1)]
 
   y.mults <- 10 ** h$breaks
-  y.label <- '#UMIs * #Cells'
+  y.label <- "#UMIs * #Cells"
 
   plot.df <- data.frame(breaks=h$breaks, y=h$counts * y.mults)
   if (estimate.cells.number) {
@@ -100,10 +101,14 @@ PrepareCellsNumberPlot <- function(umi.counts, breaks, estimate.cells.number) {
   return(res)
 }
 
-#' Plot for the estimation of the number of high-quality cells.
+#' Plot for the estimation of the number of high-quality cells
 #'
 #' @inheritParams PrepareCellsNumberPlot
-#' @return Plot of ggplot type.
+#' @param breaks number of breaks in a histogram (default=100)
+#' @param show.legend boolean Whether to plot with legend (default=FALSE)
+#' @param gg.base base ggplot2 object (default=NULL). If NULL, uses ggplot2::ggplot()
+#' @param plot.label Parameter for ggplot2 'linetype' (defautl=NULL)
+#' @return Plot of ggplot type
 #'
 #' @export
 PlotCellsNumberLine <- function(umi.counts, breaks=100, title=NULL, estimate.cells.number=FALSE,
@@ -172,7 +177,7 @@ PlotCellsNumberLine <- function(umi.counts, breaks=100, title=NULL, estimate.cel
 #' Plot for the estimation of minimal size of high-quality cells.
 #'
 #' @inheritParams PrepareCellsNumberPlot
-#' @param alpha alpha parameter of the plot
+#' @param alpha numeric Value of the alpha parameter of the plot (default=0.6)
 #' @return Plot of ggplot type.
 #'
 #' @export
@@ -198,41 +203,23 @@ PlotCellsNumberHist <- function(umi.counts, breaks=100, title=NULL, estimate.cel
   return(gg)
 }
 
-#' Plot for the summary of cell numbers (Deprecated).
+
+#' Plot for the estimation of minimal size of high-quality cells in log10 scale
 #'
 #' @inheritParams PrepareCellsNumberPlot
-#' @param mask mask for the three plots
-PlotCellsNumberSummary <- function(umi.counts, breaks=100, mask=c(T,T,T)) { #TODO: deprecated
-  n.cells.res <- EstimateCellsNumber(umi.counts)
-  n.cells <- n.cells.res$expected
-
-  if (mask[1]) {
-    plot(log10(1:length(umi.counts)),log10(as.integer(umi.counts)),type='l',lwd=2,xlab="log10[ cell rank ]",ylab="log10[ UMIs ]",panel.first=grid());
-    abline(v=log10(n.cells),col=2,lty=2); legend(x='topright',legend=paste("N =",n.cells),bty='n')
-  }
-
-  if (mask[2]) {
-    h <- hist(log10(umi.counts),breaks=breaks,plot=F)
-    y <- h$counts*(10^h$mids); y[y<0] <- 0;
-    plot(c(),c(),xlab="log10[ UMIs ]",ylab="UMIs * # of cells",ylim=c(0,max(y)),xlim=range(h$mids))
-    rect(h$breaks[-length(h$breaks)],0,h$breaks[-1],y,col='wheat')
-    abline(v=log10(umi.counts[n.cells]),col=2,lty=2)
-  }
-
-  if (mask[3]) {
-    PlotCellsNumberLine(umi.counts, breaks=breaks) +
-      ggplot2::geom_vline(xintercept = n.cells, col='red', linetype = "longdash") +
-      ggplot2::geom_vline(xintercept = n.cells.res$max, col='green', linetype = "longdash") + ggplot2::ggtitle("")
-  }
-}
-
+#' @param alpha numeric Value of the alpha parameter of the plot (default=1.0)
+#' @param linewidth numeric Line width in ggplot2, via the argument 'size' in 'geom_line()' (default=1)
+#' @param plot.border boolean Whether to include plot border (default=TRUE)
+#' @param logticks boolean Whether to include log plot tick marks (default=TRUE)
+#' @return Plot of ggplot type
+#'
 #' @export
 PlotCellsNumberLogLog <- function(umi.counts, estimate.cells.number=FALSE, show.legend=TRUE, gg.base=NULL, plot.label=NULL,
                                   plot.border=TRUE, linewidth=1, alpha=1.0, logticks=TRUE) {
   if (is.null(gg.base)) {
     gg.base <- ggplot2::ggplot()
   }
-  umi.counts <- sort(umi.counts, decreasing=T)
+  umi.counts <- sort(umi.counts, decreasing=TRUE)
   n.cells <- EstimateCellsNumber(umi.counts)
   plot.df <- data.frame(x=1:length(umi.counts), y=umi.counts)
 
@@ -287,4 +274,33 @@ PlotCellsNumberLogLog <- function(umi.counts, estimate.cells.number=FALSE, show.
   }
 
   return(gg)
+}
+
+#' Plot for the summary of cell numbers (Deprecated).
+#'
+#' @inheritParams PrepareCellsNumberPlot
+#' @param mask mask for the three plots (default=c(TRUE, TRUE, TRUE))
+PlotCellsNumberSummary <- function(umi.counts, breaks=100, mask=c(TRUE, TRUE, TRUE)) { #TODO: deprecated
+  .Deprecated("'PlotCellsNumberLine()' or 'PlotCellsNumberHist()' or 'PlotCellsNumberLogLog()'")
+  n.cells.res <- EstimateCellsNumber(umi.counts)
+  n.cells <- n.cells.res$expected
+
+  if (mask[1]) {
+    plot(log10(1:length(umi.counts)),log10(as.integer(umi.counts)),type='l',lwd=2,xlab="log10[ cell rank ]",ylab="log10[ UMIs ]",panel.first=grid());
+    abline(v=log10(n.cells),col=2,lty=2); legend(x='topright',legend=paste("N =",n.cells),bty='n')
+  }
+
+  if (mask[2]) {
+    h <- hist(log10(umi.counts), breaks=breaks, plot=FALSE)
+    y <- h$counts*(10^h$mids); y[y<0] <- 0;
+    plot(c(),c(),xlab="log10[ UMIs ]",ylab="UMIs * # of cells",ylim=c(0,max(y)),xlim=range(h$mids))
+    rect(h$breaks[-length(h$breaks)],0,h$breaks[-1],y,col='wheat')
+    abline(v=log10(umi.counts[n.cells]),col=2,lty=2)
+  }
+
+  if (mask[3]) {
+    PlotCellsNumberLine(umi.counts, breaks=breaks) +
+      ggplot2::geom_vline(xintercept = n.cells, col='red', linetype = "longdash") +
+      ggplot2::geom_vline(xintercept = n.cells.res$max, col='green', linetype = "longdash") + ggplot2::ggtitle("")
+  }
 }
