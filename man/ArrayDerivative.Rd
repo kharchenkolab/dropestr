@@ -2,20 +2,20 @@
 % Please edit documentation in R/cell_number.R
 \name{ArrayDerivative}
 \alias{ArrayDerivative}
-\title{Calculate derivative of an tabular function.}
+\title{Calculate derivative of an tabular function}
 \usage{
 ArrayDerivative(x, y, lag = 1)
 }
 \arguments{
-\item{x}{vector of x values, where the function was calculated.}
+\item{x}{vector of x values, where the function was calculated}
 
-\item{y}{vector of function values on x.}
+\item{y}{vector of function values on x}
 
-\item{lag}{smoothing parameter for derivative calculation.}
+\item{lag}{numeric Smoothing parameter for derivative calculation (default=1)}
 }
 \value{
-Vector of tabular function derivatives.
+Vector of tabular function derivatives
 }
 \description{
-Calculate derivative of an tabular function.
+Calculate derivative of an tabular function
 }

@@ -2,20 +2,20 @@
 % Please edit documentation in R/low_quality_cells.R
 \name{Normalize}
 \alias{Normalize}
-\title{Normalize numeric data.}
+\title{Normalize numeric data}
 \usage{
 Normalize(x, func = sd)
 }
 \arguments{
-\item{x}{numeric matrix or data.frame.}
+\item{x}{numeric matrix or data.frame}
 
-\item{func}{Function, which returns a normalizer for given vector.}
+\item{func}{Function, which returns a normalizer for given vector}
 }
 \value{
-Data frame with the normalized x.
+Data frame with the normalized x
 }
 \description{
-Normalize numeric data.
+Normalize numeric data
 }
 \examples{
 Normalize(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))

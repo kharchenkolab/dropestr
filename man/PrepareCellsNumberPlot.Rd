@@ -2,18 +2,23 @@
 % Please edit documentation in R/cell_number.R
 \name{PrepareCellsNumberPlot}
 \alias{PrepareCellsNumberPlot}
-\title{Prepare data for plotting the number of cells.}
+\title{Prepare data for plotting the number of cells}
 \usage{
-PrepareCellsNumberPlot(umi.counts, breaks, estimate.cells.number)
+PrepareCellsNumberPlot(
+  umi.counts,
+  breaks,
+  estimate.cells.number = FALSE,
+  title = NULL
+)
 }
 \arguments{
-\item{umi.counts}{vector with the number of UMIs per cell.}
+\item{umi.counts}{vector with the number of UMIs per cell}
 
-\item{breaks}{number of breaks in a histogram.}
+\item{breaks}{numeric Number of breaks in a histogram}
 
-\item{title}{title of the plot.}
+\item{estimate.cells.number}{boolean Whether to calculate cell numbers via EstimateCellsNumber() (default=FALSE)}
 
-\item{fill}{threshold cell ranks for different fill colors.}
+\item{title}{title of the plot (default=NULL)}
 }
 \value{
 List with the data, needed for plotting:
@@ -23,5 +28,5 @@ List with the data, needed for plotting:
   \item{y.label}{y label of the plot}
 }
 \description{
-Prepare data for plotting the number of cells.
+Prepare data for plotting the number of cells
 }

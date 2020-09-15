@@ -14,11 +14,11 @@ GetOptimalPcs(
 \arguments{
 \item{data}{data for low-quality cells filtration}
 
-\item{explained.var.required}{minimal fraction of explained variance.}
+\item{explained.var.required}{numeric Minimal fraction of explained variance (default=0.98)}
 
-\item{max.pcs}{maximal number of output principal components.}
+\item{max.pcs}{numeric Maximal number of output principal components (default=3)}
 
-\item{loadings.filt.threshold}{minimal contribution to loadings, with which feature is considered as used.}
+\item{loadings.filt.threshold}{numeric Minimal contribution to loadings, with which feature is considered as used (default=7.5e-2)}
 }
 \value{
 List with the PCA results:

@@ -2,20 +2,20 @@
 % Please edit documentation in R/low_quality_cells.R
 \name{Center}
 \alias{Center}
-\title{Center numeric data.}
+\title{Center numeric data}
 \usage{
 Center(x, func = mean)
 }
 \arguments{
-\item{x}{numeric matrix or data.frame.}
+\item{x}{numeric matrix or data.frame}
 
-\item{func}{Function, which returns a center for given vector.}
+\item{func}{Function, which returns a center for given vector}
 }
 \value{
-Data frame with the centered x.
+Data frame with the centered x
 }
 \description{
-Center numeric data.
+Center numeric data
 }
 \examples{
 Center(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))

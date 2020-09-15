@@ -2,12 +2,12 @@
 % Please edit documentation in R/cell_number.R
 \name{GetLongestTrue}
 \alias{GetLongestTrue}
-\title{Get the coordinates of the longest true seqeunce of a logical vector.}
+\title{Get the coordinates of the longest true seqeunce of a logical vector}
 \usage{
 GetLongestTrue(arr)
 }
 \arguments{
-\item{arr}{a logical vector.}
+\item{arr}{a logical vector}
 }
 \value{
 List with two coordinates:
@@ -15,5 +15,5 @@ List with two coordinates:
   \item{end}{end position}
 }
 \description{
-Get the coordinates of the longest true seqeunce of a logical vector.
+Get the coordinates of the longest true seqeunce of a logical vector
 }

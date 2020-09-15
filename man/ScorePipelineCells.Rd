@@ -21,10 +21,10 @@ ScorePipelineCells(
 )
 }
 \arguments{
-\item{pipeline.data}{data for classification.}
+\item{pipeline.data}{data for classification}
 }
 \value{
-Probability of cell to be high-quality.
+Probability of cell to be high-quality
 }
 \description{
 Score cells with a KDE classifier.

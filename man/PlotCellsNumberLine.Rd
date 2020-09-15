@@ -2,7 +2,7 @@
 % Please edit documentation in R/cell_number.R
 \name{PlotCellsNumberLine}
 \alias{PlotCellsNumberLine}
-\title{Plot for the estimation of the number of high-quality cells.}
+\title{Plot for the estimation of the number of high-quality cells}
 \usage{
 PlotCellsNumberLine(
   umi.counts,
@@ -15,15 +15,23 @@ PlotCellsNumberLine(
 )
 }
 \arguments{
-\item{umi.counts}{vector with the number of UMIs per cell.}
+\item{umi.counts}{vector with the number of UMIs per cell}
 
-\item{breaks}{number of breaks in a histogram.}
+\item{breaks}{number of breaks in a histogram (default=100)}
 
-\item{title}{title of the plot.}
+\item{title}{title of the plot (default=NULL)}
+
+\item{estimate.cells.number}{boolean Whether to calculate cell numbers via EstimateCellsNumber() (default=FALSE)}
+
+\item{show.legend}{boolean Whether to plot with legend (default=FALSE)}
+
+\item{gg.base}{base ggplot2 object (default=NULL). If NULL, uses ggplot2::ggplot()}
+
+\item{plot.label}{Parameter for ggplot2 'linetype' (defautl=NULL)}
 }
 \value{
-Plot of ggplot type.
+Plot of ggplot type
 }
 \description{
-Plot for the estimation of the number of high-quality cells.
+Plot for the estimation of the number of high-quality cells
 }

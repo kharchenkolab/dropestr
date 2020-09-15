@@ -14,13 +14,15 @@ PlotCellsNumberHist(
 )
 }
 \arguments{
-\item{umi.counts}{vector with the number of UMIs per cell.}
+\item{umi.counts}{vector with the number of UMIs per cell}
 
-\item{breaks}{number of breaks in a histogram.}
+\item{breaks}{numeric Number of breaks in a histogram}
 
-\item{title}{title of the plot.}
+\item{title}{title of the plot (default=NULL)}
 
-\item{alpha}{alpha parameter of the plot}
+\item{estimate.cells.number}{boolean Whether to calculate cell numbers via EstimateCellsNumber() (default=FALSE)}
+
+\item{alpha}{numeric Value of the alpha parameter of the plot (default=0.6)}
 }
 \value{
 Plot of ggplot type.

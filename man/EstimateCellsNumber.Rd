@@ -2,14 +2,14 @@
 % Please edit documentation in R/cell_number.R
 \name{EstimateCellsNumber}
 \alias{EstimateCellsNumber}
-\title{Get the coordinates of the longest true seqeunce of a logical vector.}
+\title{Get the coordinates of the longest true seqeunce of a logical vector}
 \usage{
 EstimateCellsNumber(umi.counts, lag = 0.05)
 }
 \arguments{
-\item{umi.counts}{vector with the number of UMIs per cell.}
+\item{umi.counts}{vector with the number of UMIs per cell}
 
-\item{lag}{smoothing parameter for derivative calculation.}
+\item{lag}{numeric Smoothing parameter for derivative calculation (default=0.05)}
 }
 \value{
 List with the estimated number of cells:
@@ -18,5 +18,5 @@ List with the estimated number of cells:
   \item{max}{maximal number of cells}
 }
 \description{
-Get the coordinates of the longest true seqeunce of a logical vector.
+Get the coordinates of the longest true seqeunce of a logical vector
 }
