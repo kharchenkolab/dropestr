@@ -2,20 +2,18 @@
 % Please edit documentation in R/kde_classifier.R
 \name{ScoreCells}
 \alias{ScoreCells}
-\title{Score cells with a KDE classifier.}
+\title{Score cells with a KDE classifier}
 \usage{
 ScoreCells(data, cells.quality)
 }
 \arguments{
-\item{data}{data for classification.}
+\item{data}{data for classification}
 
-\item{hq.cbs}{vector of cell barcodes, which mostly have high quality.}
-
-\item{lq.cbs}{vector of cell barcodes, which mostly have low quality.}
+\item{cells.quality}{vector of cell barcodes, named with cells.quality ("High", "Low")}
 }
 \value{
-Probability of cell to be high-quality.
+Probability of cell to be high-quality
 }
 \description{
-Score cells with a KDE classifier.
+Score cells with a KDE classifier
 }

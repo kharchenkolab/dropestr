@@ -2,22 +2,22 @@
 % Please edit documentation in R/kde_classifier.R
 \name{TrainKDE}
 \alias{TrainKDE}
-\title{Train binary KDE classifier.}
+\title{Train binary KDE classifier}
 \usage{
 TrainKDE(x, y, H = ks::Hns, prior.probs = c(0.5, 0.5))
 }
 \arguments{
-\item{x}{train data.}
+\item{x}{train data}
 
-\item{y}{train answers.}
+\item{y}{train answers}
 
-\item{H}{the algorithm of bandwidth selection (see 'ks' documentation).}
+\item{H}{the algorithm of bandwidth selection (see 'ks' documentation) (default=ks::Hns)}
 
-\item{prior.probs}{Prior probabilities or weights of classes.}
+\item{prior.probs}{Prior probabilities or weights of classes (default=c(0.5, 0.5))}
 }
 \value{
-Trained KDE classifier.
+Trained KDE classifier
 }
 \description{
-Train binary KDE classifier.
+Train binary KDE classifier
 }

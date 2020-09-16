@@ -2,22 +2,22 @@
 % Please edit documentation in R/low_quality_cells.R
 \name{Scale}
 \alias{Scale}
-\title{Center and normalized numeric data}
+\title{Center and normalize numeric data}
 \usage{
 Scale(x, center_func = min, norm_func = max)
 }
 \arguments{
 \item{x}{numeric matrix or data.frame}
 
-\item{norm_func}{Function, which returns a normalizer for given vector}
+\item{norm_func}{Function, which returns a normalizer for given vector (default=max())}
 
-\item{cent_func}{Function, which returns a center for given vector}
+\item{cent_func}{Function, which returns a center for given vector (default=min())}
 }
 \value{
-Data frame with the centered and normalized x
+Data.frame with the centered and normalized x
 }
 \description{
-Center and normalized numeric data
+Center and normalize numeric data
 }
 \examples{
 Scale(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))

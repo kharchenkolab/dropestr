@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{FillAdjacentUmisData}
 \alias{FillAdjacentUmisData}
-\title{Fill information about adjacent UMIs, their probabilities and differences for each UMI.}
+\title{Fill information about adjacent UMIs, their probabilities and differences for each UMI}
 \usage{
 FillAdjacentUmisData(
   umi_probabilites,
@@ -11,15 +11,15 @@ FillAdjacentUmisData(
 )
 }
 \arguments{
-\item{umi_probabilites}{vector of UMI probabilities.}
+\item{umi_probabilites}{vector of UMI probabilities}
 
-\item{adjacent_only}{logical, return only the list of adjacent UMIs.}
+\item{adjacent_only}{logical, return only the list of adjacent UMIs (default=FALSE)}
 
-\item{show_progress}{show progress bar.}
+\item{show_progress}{show progress bar (default=FALSE)}
 }
 \value{
-List with the information about adjacent UMIs.
+List with the information about adjacent UMIs
 }
 \description{
-Fill information about adjacent UMIs, their probabilities and differences for each UMI.
+Fill information about adjacent UMIs, their probabilities and differences for each UMI
 }

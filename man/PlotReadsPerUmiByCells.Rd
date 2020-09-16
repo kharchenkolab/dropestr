@@ -7,7 +7,10 @@
 PlotReadsPerUmiByCells(mean.reads.per.umi, umi.counts, ...)
 }
 \arguments{
-\item{...}{additional parameters of smoothScatter}
+\item{...}{additional parameters for smoothScatter()}
+}
+\value{
+smoothScatter plot with the mean number of reads per UMI for each cell by cell rank
 }
 \description{
 Plot mean number of reads per UMI for each cell by cell rank

@@ -13,6 +13,13 @@ EstimateSaturation(
   top.cells = 1000
 )
 }
+\arguments{
+\item{steps.num}{(default=100)}
+
+\item{max.estimate.rate}{(default=10)}
+
+\item{top.cells}{(default=1000)}
+}
 \value{
 list
 }

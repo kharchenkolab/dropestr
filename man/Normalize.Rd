@@ -4,15 +4,15 @@
 \alias{Normalize}
 \title{Normalize numeric data}
 \usage{
-Normalize(x, func = sd)
+Normalize(x, func = stats::sd)
 }
 \arguments{
 \item{x}{numeric matrix or data.frame}
 
-\item{func}{Function, which returns a normalizer for given vector}
+\item{func}{Function, which returns a normalizer for given vector (defaul=stats::sd())}
 }
 \value{
-Data frame with the normalized x
+Data.frame with the normalized x
 }
 \description{
 Normalize numeric data

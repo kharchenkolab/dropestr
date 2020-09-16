@@ -2,20 +2,20 @@
 % Please edit documentation in R/kde_classifier.R
 \name{PredictKDE}
 \alias{PredictKDE}
-\title{Predict data with the KDE classifier.}
+\title{Predict data with the KDE classifier}
 \usage{
 PredictKDE(clf, x, bandwidth.mult = 1)
 }
 \arguments{
-\item{clf}{trained classifier.}
+\item{clf}{trained classifier}
 
-\item{x}{data for classification.}
+\item{x}{data for classification}
 
-\item{bandwidth.mult}{multiplier for KDE bandwidth}
+\item{bandwidth.mult}{numeric Multiplier for KDE bandwidth (default=1)}
 }
 \value{
-Class probabilities.
+Class probabilities
 }
 \description{
-Predict data with the KDE classifier.
+Predict data with the KDE classifier
 }

@@ -7,10 +7,10 @@
 PlotGenesPerCell(count.matrix, bins = 50)
 }
 \arguments{
-\item{bins}{number of bins in histogram}
+\item{bins}{number of bins in histogram (default=50)}
 }
 \value{
-ggplot object with the plot.
+ggplot object with the plot of log number of genes by cells
 }
 \description{
 Plot distribution of log number of genes by cells

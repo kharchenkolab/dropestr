@@ -20,11 +20,12 @@ Imports:
   RcppProgress, 
   stats
 Suggests:
-  parallel,
-  optparse,
   knitr,
+  parallel,
+  preseqR (>= 3.1.0),
+  optparse,
   rmarkdown,
-  preseqR (>= 3.1.0)
+  testthat
 Depends:
   R (>= 3.5.0),
   Matrix (>= 1.2-7.1)

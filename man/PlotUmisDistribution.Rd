@@ -7,10 +7,12 @@
 PlotUmisDistribution(reads.per.umi.per.cb, trim.quantile = 0.99, bins = 50)
 }
 \arguments{
-\item{bins}{number of bins in histogram}
+\item{trim.quantile}{(default=0.99)}
+
+\item{bins}{number of bins in histogram (default=50)}
 }
 \value{
-ggplot object with the plot.
+ggplot object with the plot of UMI distribution
 }
 \description{
 Plot distribution of UMI

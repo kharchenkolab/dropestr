@@ -22,6 +22,20 @@ ScorePipelineCells(
 }
 \arguments{
 \item{pipeline.data}{data for classification}
+
+\item{mitochondrion.genes}{(default=NULL)}
+
+\item{mit.chromosome.name}{(default=NULL)}
+
+\item{tags.data}{(default=NULL)}
+
+\item{filter.mitochondrial}{(default=NULL)}
+
+\item{filter.intergenic}{boolean (default=TRUE)}
+
+\item{mit.fraction.threshold}{(default=NULL)}
+
+\item{intergenic.fraction.threshold}{(default=NULL)}
 }
 \value{
 Probability of cell to be high-quality

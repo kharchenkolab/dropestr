@@ -12,10 +12,10 @@ PlotIntergenicFractionByChromosomes(
 \arguments{
 \item{reads.per.chr.per.cells}{named list, which contains data frames for each type of reads}
 
-\item{chromosome.reads.threshold}{minimal fraction of reads for chromosome to be plotted}
+\item{chromosome.reads.threshold}{minimal fraction of reads for chromosome to be plotted (default=0.001)}
 }
 \value{
-ggplot object with the plot.
+ggplot object with the plot
 }
 \description{
 Plot fraction of different read types for each chromosome

@@ -23,11 +23,11 @@ PlotCellsNumberLine(
 
 \item{estimate.cells.number}{boolean Whether to calculate cell numbers via EstimateCellsNumber() (default=FALSE)}
 
-\item{show.legend}{boolean Whether to plot with legend (default=FALSE)}
+\item{show.legend}{boolean Whether to plot with legend (default=TRUE)}
 
 \item{gg.base}{base ggplot2 object (default=NULL). If NULL, uses ggplot2::ggplot()}
 
-\item{plot.label}{Parameter for ggplot2 'linetype' (defautl=NULL)}
+\item{plot.label}{Parameter for ggplot2 'linetype' (default=NULL)}
 }
 \value{
 Plot of ggplot type

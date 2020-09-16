@@ -12,6 +12,18 @@ PlotCellScores(
   bandwidth = c(length(scores)/100, 0.008)
 )
 }
+\arguments{
+\item{cells.number}{(default=NULL)}
+
+\item{y.threshold}{(default=NULL)}
+
+\item{main}{(default=NULL)}
+
+\item{bandwidth}{(default=c(length(scores) / 100, 0.008)))}
+}
+\value{
+smoothScatter plot with cell quality scores by cell rank
+}
 \description{
 Plot smoothScatter with cell quality scores by cell rank
 }

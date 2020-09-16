@@ -3,7 +3,7 @@
 \name{PrepareLqCellsData}
 \alias{PrepareLqCellsData}
 \alias{PrepareLqCellsDataPipeline}
-\title{Prepare data frame for low-quality cells filtration.}
+\title{Prepare data.frame for low-quality cells filtration. The more parameters provided, the more detailed matrix returned.}
 \usage{
 PrepareLqCellsData(
   count.matrix,
@@ -18,34 +18,38 @@ PrepareLqCellsData(
 PrepareLqCellsDataPipeline(
   data,
   total.reads.per.cell = NULL,
+  merge.targets = NULL,
   mitochondrion.genes = NULL,
   mit.chromosome.name = NULL,
   scale = TRUE
 )
 }
 \arguments{
-\item{count.matrix}{Matrix with counts of umi per gene per cell.}
+\item{count.matrix}{Matrix with counts of umi per gene per cell}
 
-\item{intergenic.reads.per.cell}{Number of intergenic reads per cell.}
+\item{aligned.reads.per.cell}{}
 
-\item{mitochondrion.fraction}{Fraction of mitochondrion reads or UMIs per cell}
+\item{total.umis.per.cell}{(default=NULL)}
 
-\item{scale}{should data be normalized?}
+\item{total.reads.per.cell}{Number of reads per cell before alignment (default=NULL)}
+
+\item{intergenic.reads.per.cell}{Number of intergenic reads per cell (default=NULL)}
+
+\item{mitochondrion.fraction}{Fraction of mitochondrion reads or UMIs per cell (default=NULL)}
+
+\item{scale}{(default=TRUE)}
 
 \item{data}{data, extracted with the pipeline.}
 
-\item{reads.per.gene}{List, which contains number of reads per gene per cell.}
-
-\item{total.reads.per.cb}{Number of reads per cell before alignment.}
-
 \item{merge.targets}{Targets of CB merge. Used only with total.reads.per.cell provided.}
+
+\item{mitochondrion.genes}{(default=NULL)}
 }
 \value{
-Data frame for low-quality cells filtration.
+Data.frame for low-quality cells filtration
 }
 \description{
-Prepare data frame for low-quality cells filtration.
-The more parameters provided, the more detailed matrix returned.
+Prepare data.frame for low-quality cells filtration. The more parameters provided, the more detailed matrix returned.
 }
 \section{Functions}{
 \itemize{

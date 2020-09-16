@@ -9,10 +9,10 @@ Center(x, func = mean)
 \arguments{
 \item{x}{numeric matrix or data.frame}
 
-\item{func}{Function, which returns a center for given vector}
+\item{func}{Function, which returns a center for given vector (default=mean())}
 }
 \value{
-Data frame with the centered x
+Data.frame with the centered x
 }
 \description{
 Center numeric data

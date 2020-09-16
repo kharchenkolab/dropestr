@@ -6,6 +6,11 @@
 \usage{
 FractionSmoothScatter(fraction, plot.threshold = FALSE, main = "")
 }
+\arguments{
+\item{plot.threshold}{(default=FALSE)}
+
+\item{main}{(default="")}
+}
 \description{
 Plot smoothScatter of geneset fraction for each cell by cell rank
 }

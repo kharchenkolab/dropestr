@@ -7,10 +7,10 @@
 PlotSaturationEstimates(preseq.estimates)
 }
 \arguments{
-\item{preseq.estimates}{named list of results of EstimateSaturation calls.}
+\item{preseq.estimates}{named list of results of EstimateSaturation calls}
 }
 \value{
-ggplot object with the plot.
+ggplot object with the plot
 }
 \description{
 Plot estimated library saturation

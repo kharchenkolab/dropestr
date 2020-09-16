@@ -7,11 +7,9 @@
 GetUmisDistribution(umis_per_gene_per_cell, smooth = 1L)
 }
 \arguments{
-\item{umis_per_gene_per_cell}{list of vectors: number of UMIs per gene per cell (zeros can be omitted).}
+\item{umis_per_gene_per_cell}{list of vectors: number of UMIs per gene per cell (zeros can be omitted)}
 
-\item{smooth}{smooth term, which is added to each UMI probability in case if some UMIs have only few observations.}
-
-\item{umi_length}{length of UMI.}
+\item{smooth}{smooth term, which is added to each UMI probability in case if some UMIs have only few observations (default=1)}
 }
 \value{
 Vector of UMI probabilities.
