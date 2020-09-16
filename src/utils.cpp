@@ -5,6 +5,7 @@ using namespace Rcpp;
 
 s_vec_t GetUmisList(unsigned umi_len);
 
+//' @param reads_per_umi_per_cell
 //' @export
 // [[Rcpp::export]]
 SEXP BuildCountMatrix(const List &reads_per_umi_per_cell) {
@@ -34,6 +35,9 @@ SEXP BuildCountMatrix(const List &reads_per_umi_per_cell) {
   return res;
 }
 
+//' @param rpu_per_cell
+//' @param trim_length
+//' @param reverse boolean (default=FALSE)
 //' @export
 // [[Rcpp::export]]
 List TrimUmis(const List &rpu_per_cell, int trim_length, bool reverse=false) {
@@ -54,9 +58,8 @@ List TrimUmis(const List &rpu_per_cell, int trim_length, bool reverse=false) {
 
 //' Estimate a distribution of observed UMI probabilities.
 //'
-//' @param umis_per_gene_per_cell list of vectors: number of UMIs per gene per cell (zeros can be omitted).
-//' @param umi_length length of UMI.
-//' @param smooth smooth term, which is added to each UMI probability in case if some UMIs have only few observations.
+//' @param umis_per_gene_per_cell list of vectors: number of UMIs per gene per cell (zeros can be omitted)
+//' @param smooth smooth term, which is added to each UMI probability in case if some UMIs have only few observations (default=1)
 //' @return Vector of UMI probabilities.
 //' @export
 // [[Rcpp::export]]

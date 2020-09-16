@@ -1,8 +1,8 @@
 #' Center numeric data
 #'
 #' @param x numeric matrix or data.frame
-#' @param func Function, which returns a center for given vector
-#' @return Data frame with the centered x
+#' @param func Function, which returns a center for given vector (default=mean())
+#' @return Data.frame with the centered x
 #' @examples
 #' Center(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))
 #' Center(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)), func=median)
@@ -14,13 +14,13 @@ Center <- function(x, func=mean) {
 #' Normalize numeric data
 #'
 #' @param x numeric matrix or data.frame
-#' @param func Function, which returns a normalizer for given vector
-#' @return Data frame with the normalized x
+#' @param func Function, which returns a normalizer for given vector (defaul=stats::sd())
+#' @return Data.frame with the normalized x
 #' @examples
 #' Normalize(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))
 #' Normalize(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)), func=function(v) diff(range(v)))
 #' @export
-Normalize <- function(x, func=sd) {
+Normalize <- function(x, func=stats::sd) {
   normalizer <- apply(x, 2, func)
   if (any(abs(normalizer) < 1e-10)) {
     warning("Normalizer is too small")
@@ -28,12 +28,12 @@ Normalize <- function(x, func=sd) {
   return(t(t(x) / normalizer))
 }
 
-#' Center and normalized numeric data
+#' Center and normalize numeric data
 #'
 #' @param x numeric matrix or data.frame
-#' @param cent_func Function, which returns a center for given vector
-#' @param norm_func Function, which returns a normalizer for given vector
-#' @return Data frame with the centered and normalized x
+#' @param cent_func Function, which returns a center for given vector (default=min())
+#' @param norm_func Function, which returns a normalizer for given vector (default=max())
+#' @return Data.frame with the centered and normalized x
 #' @examples
 #' Scale(data.frame(x=c(1, 2, 3), y=c(0, 25, 100)))
 #' @export
@@ -41,19 +41,16 @@ Scale <- function(x, center_func=min, norm_func=max) {
   return(data.frame(Normalize(Center(x, center_func), norm_func)))
 }
 
-#' Prepare data frame for low-quality cells filtration.
+#' Prepare data.frame for low-quality cells filtration. The more parameters provided, the more detailed matrix returned.
 #'
-#' @description Prepare data frame for low-quality cells filtration.
-#' The more parameters provided, the more detailed matrix returned.
-#'
-#' @param count.matrix Matrix with counts of umi per gene per cell.
-#' @param reads.per.gene List, which contains number of reads per gene per cell.
-#' @param intergenic.reads.per.cell Number of intergenic reads per cell.
-#' @param total.reads.per.cb Number of reads per cell before alignment.
-#' @param merge.targets Targets of CB merge. Used only with total.reads.per.cb provided.
-#' @param mitochondrion.fraction Fraction of mitochondrion reads or UMIs per cell
-#' @param scale should data be normalized?
-#' @return Data frame for low-quality cells filtration.
+#' @param count.matrix Matrix with counts of umi per gene per cell
+#' @param aligned.reads.per.cell 
+#' @param total.umis.per.cell (default=NULL)
+#' @param total.reads.per.cell Number of reads per cell before alignment (default=NULL)
+#' @param intergenic.reads.per.cell Number of intergenic reads per cell (default=NULL)
+#' @param mitochondrion.fraction Fraction of mitochondrion reads or UMIs per cell (default=NULL)
+#' @param scale boolean Whether the data should be normalized (default=TRUE)
+#' @return Data.frame for low-quality cells filtration
 #'
 #' @export
 PrepareLqCellsData <- function(count.matrix, aligned.reads.per.cell, total.umis.per.cell=NULL, total.reads.per.cell=NULL,
@@ -63,13 +60,14 @@ PrepareLqCellsData <- function(count.matrix, aligned.reads.per.cell, total.umis.
   contains.all.cbs <- sapply(list(aligned.reads.per.cell, total.umis.per.cell, total.reads.per.cell, intergenic.reads.per.cell),
          function(x) is.null(x) || length(setdiff(analyzed.cbs, names(x))) == 0)
 
-  if (!all(contains.all.cbs))
+  if (!all(contains.all.cbs)){
     stop("Each of the provided parameters must contain all cbs, presented in count.matrix")
+  }
 
   if (is.null(total.umis.per.cell)) {
     total.umis.per.cell <- Matrix::colSums(count.matrix)
   }
-  total.umis.per.cell <- sort(total.umis.per.cell[analyzed.cbs], decreasing=T)
+  total.umis.per.cell <- sort(total.umis.per.cell[analyzed.cbs], decreasing=TRUE)
   analyzed.cbs <- names(total.umis.per.cell)
 
   aligned.reads.per.cell <- aligned.reads.per.cell[analyzed.cbs]
@@ -106,12 +104,15 @@ PrepareLqCellsData <- function(count.matrix, aligned.reads.per.cell, total.umis.
   return(tech.features)
 }
 
+#' @inheritParams PrepareLqCellsData
 #' @describeIn PrepareLqCellsData wrapper for the data, obtained with the dropEst pipeline.
 #' @param data data, extracted with the pipeline.
 #' @param merge.targets Targets of CB merge. Used only with total.reads.per.cell provided.
+#' @param mitochondrion.genes (default=NULL)
+#' @param scale (default=TRUE)
 #'
 #' @export
-PrepareLqCellsDataPipeline <- function(data, total.reads.per.cell=NULL, mitochondrion.genes=NULL,
+PrepareLqCellsDataPipeline <- function(data, total.reads.per.cell=NULL, merge.targets=NULL, mitochondrion.genes=NULL,
                                        mit.chromosome.name=NULL, scale=TRUE) {
   intergenic.reads.per.cell <- rep(0, length(data$aligned_umis_per_cell))
   names(intergenic.reads.per.cell) <- names(data$aligned_umis_per_cell)
@@ -165,8 +166,12 @@ GetOptimalPcs <- function(data, explained.var.required=0.98, max.pcs=3, loadings
   return(list(pca.data=important.pcs, total.variance.explained=explained.before[pcs.num + 1], used.features=used.features))
 }
 
+
+#' @param umi.counts vector with the number of UMIs per cell
+#' @param cell.number list with estimated number of cells (default=NULL). If NULL, returns EstimateCellsNumber(umi.counts)
+#' @keywords internal
 EstimateCellsQuality <- function(umi.counts, cell.number=NULL) {
-  umi.counts <- sort(umi.counts, decreasing=T)
+  umi.counts <- sort(umi.counts, decreasing=TRUE)
   if (is.null(cell.number)) {
     cell.number <- EstimateCellsNumber(umi.counts)
   }
@@ -178,6 +183,9 @@ EstimateCellsQuality <- function(umi.counts, cell.number=NULL) {
   return(as.factor(cells.quality))
 }
 
+#' @param fraction vector with the number of UMIs per cell
+#' @param threshold list with estimated number of cells (default=NULL). If NULL, returns EstimateCellsNumber(umi.counts)
+#' @keywords internal
 FilterHighFraction <- function(fraction, threshold=NULL) {
   if (is.null(threshold)) {
     threshold <- base::mean(fraction, trim=0.2) + 4 * stats::mad(fraction)
@@ -188,7 +196,14 @@ FilterHighFraction <- function(fraction, threshold=NULL) {
 
 #' Score cells with a KDE classifier.
 #'
+#' @inheritParams PrepareLqCellsDataPipeline
 #' @param pipeline.data data for classification
+#' @param mit.chromosome.name (default=NULL)
+#' @param tags.data (default=NULL)
+#' @param filter.mitochondrial (default=NULL)
+#' @param filter.intergenic boolean (default=TRUE)
+#' @param mit.fraction.threshold (default=NULL)
+#' @param intergenic.fraction.threshold (default=NULL)
 #' @return Probability of cell to be high-quality
 #'
 #' @export
@@ -203,7 +218,7 @@ ScorePipelineCells <- function(pipeline.data, mitochondrion.genes=NULL, mit.chro
   if (filter.mitochondrial && is.null(mitochondrion.genes) && is.null(mit.chromosome.name))
     stop("Either list of mitochondrial genes of a name of mitochondrial chromosome must be provided to filter cells with high mitochondrial fraction")
 
-  umi.counts.raw <- sort(Matrix::colSums(pipeline.data$cm_raw), decreasing=T)
+  umi.counts.raw <- sort(Matrix::colSums(pipeline.data$cm_raw), decreasing=TRUE)
   cells.quality <- EstimateCellsQuality(umi.counts.raw, cell.number=cell.number)
 
   bc.df <- PrepareLqCellsDataPipeline(pipeline.data, mitochondrion.genes = mitochondrion.genes,
@@ -271,6 +286,11 @@ ScorePipelineCells <- function(pipeline.data, mitochondrion.genes=NULL, mit.chro
   return(scores)
 }
 
+#' @param umi.counts vector with the number of UMIs per cell
+#' @param scoring.data 
+#' @param cell.number list with estimated number of cells (default=NULL). If NULL, returns EstimateCellsNumber(umi.counts)
+#' @param max.pcs numeric Maximal number of output principal components (default=3)
+#' @param bandwidth.mult numeric (default=1)
 #' @export
 ScoreQualityData <- function(umi.counts, scoring.data, cell.number=NULL, max.pcs=3, bandwidth.mult=1) {
   if ("tbl" %in% class(scoring.data)) {

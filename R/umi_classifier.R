@@ -1,16 +1,27 @@
 #' @import stats
 NULL
 
+#' @param error.num
+#' @param reads.num
+#' @param error.prob
+#' @param p.collisions
+#' @keywords internal 
 ErrorNumProb <- function(error.num, reads.num, error.prob, p.collisions) {
   # p(#Err = eror.num | reads.num) =
   # \Sum_{n.errs=error.num}^{reads.num} Binom(n.errs, size=reads.num, p=error.prob) * p(#Collisions = n.errs - error.num)
-  if (error.num > reads.num)
+  if (error.num > reads.num){
     return(0)
+  }
 
   ids <- error.num:reads.num
   return(sum(dbinom(ids, size=reads.num, prob=error.prob) * p.collisions[error.num + 1, ids + 1]))
 }
 
+#' @param max.reads.num
+#' @param error.prob
+#' @param umi.num
+#' @param mc.cores numeric Number of cores to use, i.e. at most how many child processes will be run simultaneously
+#' @keywords internal 
 ErrorProbsGivenNumOfReadsLarge <- function(max.reads.num, error.prob, umi.num, mc.cores) { # TODO: optimize
   p.collisions <- FillDpMatrix(1, umi.num + 1, max.reads.num + 1)
   probs <- plapply(1:max.reads.num, function(r) sapply(0:umi.num, function(e)
@@ -22,6 +33,10 @@ ErrorProbsGivenNumOfReadsLarge <- function(max.reads.num, error.prob, umi.num, m
   return(probs)
 }
 
+#' @param probs.given.rl
+#' @param reads.small.cumsum
+#' @param reads.large
+#' @keywords internal 
 ErrorProbsGivenRlRs <- function(probs.given.rl, reads.small.cumsum, reads.large) {
   sum.reads.large <- reads.large + c(0, reads.small.cumsum)
   sum.reads.large[sum.reads.large > ncol(probs.given.rl)] <- ncol(probs.given.rl)
@@ -31,6 +46,9 @@ ErrorProbsGivenRlRs <- function(probs.given.rl, reads.small.cumsum, reads.large)
   return(diag(probs.subset) / colSums(probs.subset))
 }
 
+#' @param reads.per.umi.extracted
+#' @param max.umis.per.cb (default=4)
+#' @keywords internal 
 ReadsPerUmiDataset <- function(reads.per.umi.extracted, max.umis.per.cb=4) { # TODO: merge it with TrainNBClassifier
   umis.per.gene <- sapply(reads.per.umi.extracted, length)
   reads.large.all <- unlist(reads.per.umi.extracted[umis.per.gene == 1])
@@ -62,12 +80,19 @@ ReadsPerUmiDataset <- function(reads.per.umi.extracted, max.umis.per.cb=4) { # T
   return(data.frame(Large=reads.large.all, Small=reads.small.all))
 }
 
+#' @param obs.err.num
+#' @param total.smaller.num
+#' @param larger.num
+#' @param prior.error.prob
+#' @param max.adj.num
+#' @keywords internal 
 AdjustErrorProb <- function(obs.err.num, total.smaller.num, larger.num, prior.error.prob, max.adj.num)  {
   err.nums <- obs.err.num:total.smaller.num
   weights <- dbinom(err.nums - obs.err.num, size=err.nums, prob=(total.smaller.num + larger.num) / max.adj.num)
   return(sum(prior.error.prob[err.nums + 1] * weights))
 }
 
+#' @keywords internal 
 ErrorsNumMle <- function(prior.error.prob, prior.real.prob, log.error.prob, log.real.prob, max.adj.num, larger.num) {
   prior.error.prob <- sapply(0:length(log.error.prob), AdjustErrorProb, total.smaller.num=length(log.error.prob),
                              prior.error.prob=prior.error.prob, max.adj.num=max.adj.num, larger.num=larger.num)
@@ -78,6 +103,9 @@ ErrorsNumMle <- function(prior.error.prob, prior.real.prob, log.error.prob, log.
   return(which.max(log(prior.error.prob) + log(rev(prior.real.prob)) + error.part.prob + real.part.prob) - 1)
 }
 
+#' @param distribution
+#' @param max.quants.num
+#' @keywords internal 
 GetPercentileQuantBorders <- function(distribution, max.quants.num) {
   kEps <- 1e-5
   distribution <- distribution %>% dplyr::arrange(Value) %>% dplyr::mutate(Probability = cumsum(Probability))
@@ -86,6 +114,9 @@ GetPercentileQuantBorders <- function(distribution, max.quants.num) {
   return(distribution$Value[quants])
 }
 
+#' @param values
+#' @param max.quants.num
+#' @keywords internal 
 GetQualityQuantBorders <- function(values, max.quants.num) {
   values <- lapply(values, ValueCounts) %>%
     lapply(function(v) data.frame(Value=as.integer(names(v)), Probability = v / sum(v)))
@@ -98,6 +129,12 @@ GetQualityQuantBorders <- function(values, max.quants.num) {
   return(GetPercentileQuantBorders(distribution, max.quants.num))
 }
 
+#' @param values
+#' @param smooth
+#' @param max.value (default=NULL)
+#' @param smooth.probs (default=FALSE)
+#' @param log.probs (default=FALSE)
+#' @keywords internal 
 SmoothDistribution <- function(values, smooth, max.value=NULL, smooth.probs=FALSE, log.probs=FALSE) {
   if (is.null(max.value)) {
     max.value <- max(values) + 1
@@ -118,6 +155,11 @@ SmoothDistribution <- function(values, smooth, max.value=NULL, smooth.probs=FALS
   return(probs)
 }
 
+#' @param rpus.extracted
+#' @param quality.prior
+#' @param adj.umi.num
+#' @param mc.cores numeric Number of cores to use, i.e. at most how many child processes will be run simultaneously
+#' @keywords internal 
 TrainNBNegative <- function(rpus.extracted, quality.prior, adj.umi.num, mc.cores) {
   params.neg <- list()
 
@@ -133,6 +175,11 @@ TrainNBNegative <- function(rpus.extracted, quality.prior, adj.umi.num, mc.cores
   return(params.neg)
 }
 
+#' @param reads.per.umi.per.cb
+#' @param adj.umi.num
+#' @param quality.quants.num (default=15)
+#' @param quality.smooth (default=0.01)
+#' @param mc.cores numeric Number of cores to use, i.e. at most how many child processes will be run simultaneously (default=1)
 #' @export
 TrainNBClassifier <- function(reads.per.umi.per.cb, adj.umi.num, quality.quants.num=15, quality.smooth=0.01, mc.cores=1) {
   umis.per.gene <- sapply(reads.per.umi.per.cb, length)
@@ -142,8 +189,9 @@ TrainNBClassifier <- function(reads.per.umi.per.cb, adj.umi.num, quality.quants.
 
   train.data <- PrepareClassifierTrainingData(paired.rpus[is.pair.adjacent > 0]) # TODO: we need only quality
 
-  if (nrow(train.data) == 0)
+  if (nrow(train.data) == 0){
     stop('Data has no training samples with UMI errors')
+  }
 
   # Quality estimation
   quality.vals <- list(negative=train.data$Quality, common=unlist(plapply(reads.per.umi.per.cb[umis.per.gene <= 2], sapply, `[[`, 2, mc.cores=mc.cores)))
@@ -165,6 +213,13 @@ TrainNBClassifier <- function(reads.per.umi.per.cb, adj.umi.num, quality.quants.
   return(list(Negative=clf.neg, Common=clf.common, QualityQuantBorders=quant.borders, MaxAdjacentUmisNum=adj.umi.num))
 }
 
+#' @param reads.per.umi.from
+#' @param reads.per.umi.to
+#' @param dp.matrices
+#' @param neighbours.prob.index
+#' @param size.adj
+#' @param max.adj.num
+#' @keywords internal 
 EstimateSmallerNeighbourProbs <- function(reads.per.umi.from, reads.per.umi.to, dp.matrices, neighbours.prob.index,
                                           size.adj, max.adj.num) {
   cur.n.p.i <- neighbours.prob.index[names(reads.per.umi.from)]
@@ -177,14 +232,24 @@ EstimateSmallerNeighbourProbs <- function(reads.per.umi.from, reads.per.umi.to, 
   return(list(Probs=neighbour.distrs, LargerNum=larger.nn))
 }
 
+#' @param classifier.df
+#' @keywords internal 
 ClassifierDfOrder <- function(classifier.df) {
   # TODO: order by target and score
   return(order(classifier.df$Target, classifier.df$MinRpU, classifier.df$Quality, classifier.df$Base))
 }
 
+#' @param classifier
+#' @param classifier.df
+#' @param filt.gene
+#' @param dp.matrices
+#' @param neighbours.prob.index
+#' @param size.adj
 #' @export
 PredictBayesian <- function(classifier, classifier.df, filt.gene, dp.matrices, neighbours.prob.index, size.adj) { #TODO: not export
-  divSum <- function(x) x / sum(x)
+  divSum <- function(x){
+    x / sum(x)
+  }
 
   classifier.df <- classifier.df[ClassifierDfOrder(classifier.df),]
   rpus <- ExtractReadsPerUmi(filt.gene, one.gene=TRUE)

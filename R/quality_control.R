@@ -9,14 +9,14 @@ if(getRversion() >= "2.15.1"){
 
 #' Estimate library saturation with preseqR
 #'
-#' @export
 #' @param reads.by.umig.vec
 #' @param reads.by.umig.cbs
 #' @param umi.counts
-#' @param steps.num
-#' @param max.estimate.rate
-#' @param top.cells
+#' @param steps.num (default=100)
+#' @param max.estimate.rate (default=10)
+#' @param top.cells (default=1000)
 #' @return list
+#' @export
 EstimateSaturation <- function(reads.by.umig.vec, reads.by.umig.cbs, umi.counts, steps.num=100, max.estimate.rate=10, top.cells=1000) {
   if (!requireNamespace("preseqR", quietly = TRUE)){
     stop("preseqR package is required")
@@ -46,9 +46,9 @@ EstimateSaturation <- function(reads.by.umig.vec, reads.by.umig.cbs, umi.counts,
 
 #' Plot estimated library saturation
 #'
+#' @param preseq.estimates named list of results of EstimateSaturation calls
+#' @return ggplot object with the plot
 #' @export
-#' @param preseq.estimates named list of results of EstimateSaturation calls.
-#' @return ggplot object with the plot.
 PlotSaturationEstimates <- function(preseq.estimates) {
   plot.df <- lapply(names(preseq.estimates), function(n) cbind(preseq.estimates[[n]]$sat,
                                                                IsPrediction = preseq.estimates[[n]]$sat$depth < preseq.estimates[[n]]$current$depth,
@@ -65,10 +65,10 @@ PlotSaturationEstimates <- function(preseq.estimates) {
 
 #' Plot fraction of different read types for each chromosome
 #'
-#' @export
 #' @param reads.per.chr.per.cells named list, which contains data frames for each type of reads
-#' @param chromosome.reads.threshold minimal fraction of reads for chromosome to be plotted
-#' @return ggplot object with the plot.
+#' @param chromosome.reads.threshold minimal fraction of reads for chromosome to be plotted (default=0.001)
+#' @return ggplot object with the plot
+#' @export
 PlotIntergenicFractionByChromosomes <- function(reads.per.chr.per.cells, chromosome.reads.threshold=0.001) {
   dfs <- lapply(reads.per.chr.per.cells, colSums)
   dfs <- dfs[sapply(dfs, length) > 0]
@@ -87,12 +87,13 @@ PlotIntergenicFractionByChromosomes <- function(reads.per.chr.per.cells, chromos
 
 #' Plot smoothScatter with cell quality scores by cell rank
 #'
-#' @export
 #' @param scores
-#' @param cells.number
-#' @param y.threshold
-#' @param main
-#' @param bandwidth
+#' @param cells.number (default=NULL)
+#' @param y.threshold (default=NULL)
+#' @param main (default=NULL)
+#' @param bandwidth  (default=c(length(scores) / 100, 0.008)))
+#' @return smoothScatter plot with cell quality scores by cell rank
+#' @export
 PlotCellScores <- function(scores, cells.number=NULL, y.threshold=NULL, main=NULL, bandwidth=c(length(scores) / 100, 0.008)) {
   smoothScatter(scores, bandwidth=bandwidth, xlab='Cell rank', ylab='Quality score', cex.lab=1.4, main=main)
   if (!is.null(cells.number)) {
@@ -106,11 +107,11 @@ PlotCellScores <- function(scores, cells.number=NULL, y.threshold=NULL, main=NUL
 
 #' Plot distribution of UMI
 #'
-#' @export
 #' @param reads.per.umi.per.cb
-#' @param trim.quantile
-#' @param bins number of bins in histogram
-#' @return ggplot object with the plot.
+#' @param trim.quantile (default=0.99)
+#' @param bins number of bins in histogram (default=50)
+#' @return ggplot object with the plot of UMI distribution
+#' @export
 PlotUmisDistribution <- function(reads.per.umi.per.cb, trim.quantile=0.99, bins=50) {
   umi.distribution <- GetUmisDistribution(reads.per.umi.per.cb)
   umi.probabilities <- umi.distribution / sum(umi.distribution)
@@ -122,20 +123,21 @@ PlotUmisDistribution <- function(reads.per.umi.per.cb, trim.quantile=0.99, bins=
 
 #' Plot mean number of reads per UMI for each cell by cell rank
 #'
-#' @export
 #' @param mean.reads.per.umi
 #' @param umi.counts
-#' @param ... additional parameters of smoothScatter
+#' @param ... additional parameters for smoothScatter()
+#' @return smoothScatter plot with the mean number of reads per UMI for each cell by cell rank
+#' @export
 PlotReadsPerUmiByCells <- function(mean.reads.per.umi, umi.counts, ...) {
   smoothScatter(log10(umi.counts), mean.reads.per.umi[names(umi.counts)], xlab='log10(#UMI in cell)', ylab='Mean reads/UMI per cell', ...)
 }
 
 #' Plot distribution of log number of genes by cells
 #'
-#' @export
 #' @param count.matrix
-#' @param bins number of bins in histogram
-#' @return ggplot object with the plot.
+#' @param bins number of bins in histogram (default=50)
+#' @return ggplot object with the plot of log number of genes by cells
+#' @export
 PlotGenesPerCell <- function(count.matrix, bins=50) {
   genes.per.cell <- Matrix::colSums(count.matrix > 0)
   ggplot2::qplot(genes.per.cell, col=I('black'), bins=bins) +
@@ -146,10 +148,10 @@ PlotGenesPerCell <- function(count.matrix, bins=50) {
 
 #' Plot smoothScatter of geneset fraction for each cell by cell rank
 #'
-#' @export
 #' @param fraction
-#' @param plot.threshold
-#' @param main
+#' @param plot.threshold (default=FALSE)
+#' @param main (default="")
+#' @export
 FractionSmoothScatter <- function(fraction, plot.threshold=FALSE, main='') {
   smoothScatter(fraction, xlab='Cell rank', ylab='Fraction', main=main, cex.lab=1.4, ylim=c(0, 1))
   if (is.logical(plot.threshold) && plot.threshold) {
@@ -160,6 +162,8 @@ FractionSmoothScatter <- function(fraction, plot.threshold=FALSE, main='') {
   }
 }
 
+#' @param reads.per.chr.per.cell named list, which contains data frames for each type of reads
+#' @param chromosome.name 
 #' @export
 GetChromosomeFraction <- function(reads.per.chr.per.cell, chromosome.name) {
   read.counts <- sort(rowSums(reads.per.chr.per.cell), decreasing=TRUE)
@@ -172,6 +176,8 @@ GetChromosomeFraction <- function(reads.per.chr.per.cell, chromosome.name) {
   return(chromosome.frac)
 }
 
+#' @param count.matrix
+#' @param genes 
 #' @export
 GetGenesetFraction <- function(count.matrix, genes) {
   umi.counts <- sort(Matrix::colSums(count.matrix), decreasing=TRUE)

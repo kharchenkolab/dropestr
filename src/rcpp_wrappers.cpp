@@ -48,6 +48,7 @@ NumericVector vpow(const NumericVector& base, double exp) {
   return res;
 }
 
+//' @param values
 //' @export
 // [[Rcpp::export]]
 si_map_t ValueCountsC(const s_vec_t &values) {
@@ -59,6 +60,8 @@ si_map_t ValueCountsC(const s_vec_t &values) {
   return res;
 }
 
+//' @param values
+//' @param return_probs boolean (default=FALSE)
 //' @export
 // [[Rcpp::export]]
 std::unordered_map<int, double> ValueCounts(const std::vector<int> &values, bool return_probs=false) {

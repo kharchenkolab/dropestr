@@ -105,9 +105,9 @@ PrepareCellsNumberPlot <- function(umi.counts, breaks, estimate.cells.number=FAL
 #'
 #' @inheritParams PrepareCellsNumberPlot
 #' @param breaks number of breaks in a histogram (default=100)
-#' @param show.legend boolean Whether to plot with legend (default=FALSE)
+#' @param show.legend boolean Whether to plot with legend (default=TRUE)
 #' @param gg.base base ggplot2 object (default=NULL). If NULL, uses ggplot2::ggplot()
-#' @param plot.label Parameter for ggplot2 'linetype' (defautl=NULL)
+#' @param plot.label Parameter for ggplot2 'linetype' (default=NULL)
 #' @return Plot of ggplot type
 #'
 #' @export

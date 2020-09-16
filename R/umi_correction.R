@@ -1,6 +1,8 @@
 #' @useDynLib dropestr
 NULL
 
+#' @param mc.cores numeric Number of cores to use, i.e. at most how many child processes will be run simultaneously.
+#' @keywords internal
 GetMcCores <- function(mc.cores) {
   if (is.null(mc.cores)) {
     mc.cores <- options()$mc.cores
@@ -18,25 +20,33 @@ if (requireNamespace("parallel", quietly = TRUE)) {
   plapply <- function(..., mc.cores=NULL) lapply(...)
 }
 
+#' @param reads.per.umi.per.cb
+#' @param one.gene
+#' @param mc.cores
 #' @export
 ExtractReadsPerUmi <- function(reads.per.umi.per.cb, one.gene=FALSE, mc.cores=1) {
-  if (one.gene)
+  if (one.gene){
     return(sapply(reads.per.umi.per.cb, `[[`, 1))
+  }
 
   return(plapply(reads.per.umi.per.cb, sapply, `[[`, 1, mc.cores=mc.cores))
 }
 
+#' @param umis.per.gene
+#' @param collisions.info
 #' @export
 AdjustCollisions <- function(umis.per.gene, collisions.info) { # TODO: remove
-  if (any(umis.per.gene > length(collisions.info)))
+  if (any(umis.per.gene > length(collisions.info))){
     stop(paste0("Too large value of gene expression: ", umis.per.gene))
+  }
 
   return(collisions.info[umis.per.gene])
 }
 
 CorrectUmiSequenceErrorsClassic <- function(reads.per.umi.per.cb, mult, mc.cores, verbosity.level = 0) {
-  if (length(reads.per.umi.per.cb) == 0)
+  if (length(reads.per.umi.per.cb) == 0){
     warning("Empty data for classic UMI correction")
+  }
 
   filt.genes <- plapply(reads.per.umi.per.cb, FilterUmisInGeneClassic, mult=mult, mc.cores=mc.cores)
 
@@ -53,11 +63,13 @@ CorrectUmiSequenceErrorsBayesian <- function(reads.per.umi.per.cb, collisions.in
     message("Estimating prior error probabilities...")
   }
 
-  if (length(reads.per.umi.per.cb) == 0)
+  if (length(reads.per.umi.per.cb) == 0){
     return(reads.per.umi.per.cb)
+  }
 
-  if (length(reads.per.umi.per.cb[[1]][[1]][[2]]) == 0)
+  if (length(reads.per.umi.per.cb[[1]][[1]][[2]]) == 0){
     stop("Information about quality is required for UMI correction")
+  }
 
   clf <- try(TrainNBClassifier(reads.per.umi.per.cb, adj.umi.num=adj.umi.num, quality.quants.num=quality.quants.num,
                                mc.cores=mc.cores))
@@ -118,7 +130,7 @@ CorrectUmiSequenceErrors <- function(reads.per.umi.per.cb.info, umi.probabilitie
   max.umi.per.gene <- max(sapply(reads.per.umi.per.cb, length))
   if (is.null(collisions.info)) {
     if (verbosity.level > 0) {
-      message("Filling collisions info...\n")
+      message("Filling collisions info...")
     }
 
     collisions.info <- FillCollisionsAdjustmentInfo(umi.probabilities, max.umi.per.gene + 1, verbose=(verbosity.level > 1))
@@ -162,11 +174,13 @@ CorrectUmiSequenceErrors <- function(reads.per.umi.per.cb.info, umi.probabilitie
   return(BuildCountMatrix(reads.per.umi.per.cb.info))
 }
 
+
 GetUmiProbabilitiesIndex <- function(umi.probs, umi.tolerance) {
   res <- paste(round(umi.probs / umi.tolerance))
   names(res) <- names(umi.probs)
   return(res)
 }
+
 
 #' @export
 FilterUmisInGene <- function(cur.gene, classifier, dp.matrices, neighbours.prob.index, collisions.info, max.iter=100,

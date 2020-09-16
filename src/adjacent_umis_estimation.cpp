@@ -24,6 +24,7 @@ s_vec_t getAdjacentUmis(const std::string &umi, const T &filter, bool need_filte
   return res;
 }
 
+//' @param umi numeric 
 //' @export
 // [[Rcpp::export]]
 s_vec_t GetAdjacentUmis(const std::string &umi) { // TODO: not @export
@@ -112,12 +113,12 @@ std::unordered_map<std::string, s_vec_t> SubsetAdjacentUmis(const s_vec_t &umis)
   return res;
 }
 
-//' Fill information about adjacent UMIs, their probabilities and differences for each UMI.
+//' Fill information about adjacent UMIs, their probabilities and differences for each UMI
 //'
-//' @param umi_probabilites vector of UMI probabilities.
-//' @param adjacent_only logical, return only the list of adjacent UMIs.
-//' @param show_progress show progress bar.
-//' @return List with the information about adjacent UMIs.
+//' @param umi_probabilites vector of UMI probabilities
+//' @param adjacent_only logical, return only the list of adjacent UMIs (default=FALSE)
+//' @param show_progress show progress bar (default=FALSE)
+//' @return List with the information about adjacent UMIs
 //'
 //' @export
 // [[Rcpp::export]]
@@ -165,6 +166,8 @@ List FillAdjacentUmisData(const NumericVector &umi_probabilites, bool adjacent_o
   return List::create(_["adjacent.umis"] = neighbours, _["probabilities"] = adjacent_probs);
 }
 
+//' @param reads_per_umi_from
+//' @param reads_per_umi_to
 //' @export
 // [[Rcpp::export]]
 List GetAdjacentUmisNum(const IntegerVector &reads_per_umi_from, const IntegerVector &reads_per_umi_to) {
@@ -212,6 +215,9 @@ List GetAdjacentUmisNum(const IntegerVector &reads_per_umi_from, const IntegerVe
 }
 
 
+//' @param prior_prob
+//' @param neighbours_num
+//' @param max_umi_per_cell
 //' @export
 // [[Rcpp::export]]
 NumericMatrix FillDpMatrix(double prior_prob, int neighbours_num, int max_umi_per_cell) { //TODO: not export this

@@ -1,14 +1,15 @@
-#' Train binary KDE classifier.
+#' Train binary KDE classifier
 #'
-#' @param x train data.
-#' @param y train answers.
-#' @param H the algorithm of bandwidth selection (see 'ks' documentation).
-#' @param prior.probs Prior probabilities or weights of classes.
-#' @return Trained KDE classifier.
+#' @param x train data
+#' @param y train answers
+#' @param H the algorithm of bandwidth selection (see 'ks' documentation) (default=ks::Hns)
+#' @param prior.probs Prior probabilities or weights of classes (default=c(0.5, 0.5))
+#' @return Trained KDE classifier
 #' @export
 TrainKDE <- function(x, y, H=ks::Hns, prior.probs=c(0.5, 0.5)) {
-  if (any(prior.probs < 0))
+  if (any(prior.probs < 0)){
     stop("Prior probabilities must be positive")
+  }
 
   y <- as.factor(y)
   prior.probs <- Normalize(as.matrix(prior.probs), func=sum)[, 1]
@@ -25,12 +26,12 @@ TrainKDE <- function(x, y, H=ks::Hns, prior.probs=c(0.5, 0.5)) {
   return(clf)
 }
 
-#' Predict data with the KDE classifier.
+#' Predict data with the KDE classifier
 #'
-#' @param clf trained classifier.
-#' @param x data for classification.
-#' @param bandwidth.mult multiplier for KDE bandwidth
-#' @return Class probabilities.
+#' @param clf trained classifier
+#' @param x data for classification
+#' @param bandwidth.mult numeric Multiplier for KDE bandwidth (default=1)
+#' @return Class probabilities
 #' @export
 PredictKDE <- function(clf, x, bandwidth.mult=1) {
   if (class(clf) != "KdeClassifier") {
@@ -58,6 +59,14 @@ PredictKDE <- function(clf, x, bandwidth.mult=1) {
   return(ans)
 }
 
+#' Train classifier with TrainKDE
+#'
+#' @param tr.data training data for classification
+#' @param cells.quality vector of cell barcodes, named with cells.quality ("High", "Low")
+#' @param umi.counts vector with the number of UMIs per cell (default=NULL)
+#' @param trim.low.quality.rate numeric Value at which to filter low quality values (default=1.5)
+#' @param prior.probs Prior probabilities or weights of classes (default=c(0.5, 0.5))
+#' @return Trained KDE classifier
 #' @export
 TrainClassifier <- function(tr.data, cells.quality, umi.counts=NULL, trim.low.quality.rate = 1.5, prior.probs=c(0.5, 0.5)) {
   hq.cbs <- names(cells.quality)[cells.quality == 'High']
@@ -70,16 +79,17 @@ TrainClassifier <- function(tr.data, cells.quality, umi.counts=NULL, trim.low.qu
   return(TrainKDE(tr.data, tr.answers, prior.probs=prior.probs))
 }
 
-#' Score cells with a KDE classifier.
+#' Score cells with a KDE classifier
 #'
-#' @param data data for classification.
-#' @param hq.cbs vector of cell barcodes, which mostly have high quality.
-#' @param lq.cbs vector of cell barcodes, which mostly have low quality.
-#' @return Probability of cell to be high-quality.
+#' @param data data for classification
+#' @param cells.quality vector of cell barcodes, named with cells.quality ("High", "Low")
+#' @return Probability of cell to be high-quality
 #'
 #' @export
 ScoreCells <- function(data, cells.quality) {
+  ## hq.cbs := vector of cell barcodes, which mostly have high quality
   hq.cbs <- names(cells.quality)[cells.quality == 'High']
+  ## lq.cbs := vector of cell barcodes, which mostly have low quality
   lq.cbs <- names(cells.quality)[cells.quality == 'Low']
   tr.data <- data[c(hq.cbs, lq.cbs),]
   tr.answers <- c(rep(1, length(hq.cbs)), rep(0, length(lq.cbs)))

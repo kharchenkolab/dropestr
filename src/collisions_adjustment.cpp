@@ -79,6 +79,10 @@ public:
   }
 };
 
+
+//' @param umi_probabilities 
+//' @param max_umi_per_gene
+//' @param verbose boolean Whether (default=FALSE)
 //' @export
 // [[Rcpp::export]]
 std::vector<unsigned> FillCollisionsAdjustmentInfo(const std::vector<double> &umi_probabilities, unsigned max_umi_per_gene, bool verbose=false) {
@@ -87,6 +91,8 @@ std::vector<unsigned> FillCollisionsAdjustmentInfo(const std::vector<double> &um
   return adjuster.adjusted_sizes();
 }
 
+//' @param value numeric
+//' @param umis_number numeric
 //' @export
 // [[Rcpp::export]]
 int AdjustGeneExpressionUniform(int value, int umis_number) {

@@ -4,6 +4,8 @@
 
 using namespace Rcpp;
 
+//' @param values
+//' @param quant_borders
 //' @export
 // [[Rcpp::export]]
 IntegerVector Quantize(const NumericVector &values, const NumericVector &quant_borders) {
