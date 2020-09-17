@@ -4,6 +4,7 @@
 #' @import Matrix
 NULL
 
+
 ## for magrittr and dplyr functions below
 if(getRversion() >= "2.15.1"){
   utils::globalVariables(c("."))

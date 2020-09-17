@@ -21,8 +21,8 @@ if (requireNamespace("parallel", quietly = TRUE)) {
 }
 
 #' @param reads.per.umi.per.cb
-#' @param one.gene
-#' @param mc.cores
+#' @param one.gene (default=FALSE)
+#' @param mc.cores (default=1)
 #' @export
 ExtractReadsPerUmi <- function(reads.per.umi.per.cb, one.gene=FALSE, mc.cores=1) {
   if (one.gene){
@@ -43,6 +43,11 @@ AdjustCollisions <- function(umis.per.gene, collisions.info) { # TODO: remove
   return(collisions.info[umis.per.gene])
 }
 
+#' @param reads.per.umi.per.cb
+#' @param mult
+#' @param mc.cores
+#' @param verbosity.level (default=0)
+#' @keywords internal 
 CorrectUmiSequenceErrorsClassic <- function(reads.per.umi.per.cb, mult, mc.cores, verbosity.level = 0) {
   if (length(reads.per.umi.per.cb) == 0){
     warning("Empty data for classic UMI correction")
@@ -57,6 +62,14 @@ CorrectUmiSequenceErrorsClassic <- function(reads.per.umi.per.cb, mult, mc.cores
   return(filt.genes)
 }
 
+#' @param reads.per.umi.per.cb
+#' @param collisions.info
+#' @param correction.info
+#' @param adj.umi.num
+#' @param mc.cores
+#' @param quality.quants.num
+#' @param verbosity.level (default=0)
+#' @keywords internal 
 CorrectUmiSequenceErrorsBayesian <- function(reads.per.umi.per.cb, collisions.info, correction.info, adj.umi.num,
                                              mc.cores, quality.quants.num, verbosity.level=0) {
   if (verbosity.level > 0) {
@@ -94,6 +107,19 @@ CorrectUmiSequenceErrorsBayesian <- function(reads.per.umi.per.cb, collisions.in
   return(filt.genes)
 }
 
+#' @param reads.per.umi.per.cb.info
+#' @param umi.probabilities (default=NULL)
+#' @param collisions.info (default=NULL)
+#' @param correction.info  (default=NULL)
+#' @param probability.quants.num (default=50)
+#' @param adjust.collisions (default=TRUE)
+#' @param quality.quants.num (default=10)
+#' @param mc.cores (default=NULL)
+#' @param verbosity.level (default=0)
+#' @param return (default="matrix")
+#' @param distribution.smooth (default=10)
+#' @param method (default="Bayesian")
+#' @param mult (default=1)
 #' @export
 CorrectUmiSequenceErrors <- function(reads.per.umi.per.cb.info, umi.probabilities=NULL, collisions.info=NULL,
                                      correction.info=NULL, probability.quants.num=50, adjust.collisions=TRUE,
@@ -174,7 +200,9 @@ CorrectUmiSequenceErrors <- function(reads.per.umi.per.cb.info, umi.probabilitie
   return(BuildCountMatrix(reads.per.umi.per.cb.info))
 }
 
-
+#' @param umi.probs
+#' @param umi.tolerance
+#' @keywords internal 
 GetUmiProbabilitiesIndex <- function(umi.probs, umi.tolerance) {
   res <- paste(round(umi.probs / umi.tolerance))
   names(res) <- names(umi.probs)
@@ -182,16 +210,25 @@ GetUmiProbabilitiesIndex <- function(umi.probs, umi.tolerance) {
 }
 
 
+#' @param cur.gene
+#' @param classifier
+#' @param dp.matrices
+#' @param neighbours.prob.index
+#' @param collisions.info
+#' @param max.iter (default=100)
+#' @param verbose (default=FALSE)
 #' @export
 FilterUmisInGene <- function(cur.gene, classifier, dp.matrices, neighbours.prob.index, collisions.info, max.iter=100,
                              verbose=FALSE) {
-  if (length(cur.gene) == 1)
+  if (length(cur.gene) == 1){
     return(cur.gene)
+  }
 
   classifier.df <- PrepareClassifierData(cur.gene)
 
-  if (nrow(classifier.df) == 0)
+  if (nrow(classifier.df) == 0){
     return(cur.gene)
+  }
 
   quantized.quality <- Quantize(classifier.df$Quality, classifier$QualityQuantBorders) + 1
   classifier.df$RealQualityProb <- classifier$Common$Quality[quantized.quality]
@@ -238,6 +275,10 @@ FilterUmisInGene <- function(cur.gene, classifier, dp.matrices, neighbours.prob.
   return(cur.gene[not.filtered.umis])
 }
 
+#' @param umi.probabilities
+#' @param max.umi.per.gene
+#' @param quants.num (default=50)
+#' @param verbosity.level (default=0)
 #' @export
 PrepareUmiCorrectionInfo <- function(umi.probabilities, max.umi.per.gene, quants.num=50, verbosity.level=0) {
   if (verbosity.level > 0) {

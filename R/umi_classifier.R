@@ -92,6 +92,13 @@ AdjustErrorProb <- function(obs.err.num, total.smaller.num, larger.num, prior.er
   return(sum(prior.error.prob[err.nums + 1] * weights))
 }
 
+
+#' @param prior.error.prob
+#' @param prior.real.prob
+#' @param log.error.prob
+#' @param log.real.prob
+#' @param max.adj.num
+#' @param larger.num
 #' @keywords internal 
 ErrorsNumMle <- function(prior.error.prob, prior.real.prob, log.error.prob, log.real.prob, max.adj.num, larger.num) {
   prior.error.prob <- sapply(0:length(log.error.prob), AdjustErrorProb, total.smaller.num=length(log.error.prob),
